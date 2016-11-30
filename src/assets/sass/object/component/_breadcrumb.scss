@@ -1,0 +1,41 @@
+.c-breadcrumb {
+  margin-top: 15px;
+  margin-left: 10px;
+  //
+  @media (min-width: $pc-size) {
+    width: 1192px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
+
+.c-breadcrumb_item {
+  //
+  + .c-breadcrumb_item {
+    margin-left: .5em;
+    @include fontsize(14);
+  }
+  //
+  &.c-breadcrumb_item--arrow {
+    width: 8px;
+    height: 8px;
+    border-right: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    transform: rotate(-45deg);
+  }
+  //
+  &:last-child {
+    .c-breadcrumb_target {
+      text-decoration: none;
+    }
+  }
+}
+
+.c-breadcrumb_target {
+  color: $black;
+  text-decoration: underline;
+  &:hover {
+    color: $primary-color;
+    text-decoration: none;
+  }
+}

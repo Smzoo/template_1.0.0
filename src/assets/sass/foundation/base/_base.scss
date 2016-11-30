@@ -1,0 +1,172 @@
+/*
+#styleguide
+見出しのスタイル＊ タイトルをここに書く。
+
+これはサイト全体に適用される見出しのスタイルです＊ コメントをここに書く。
+
+
+
+```
+<h1 class="h1">title01</h1>
+<h2 class="h2">title02</h2>
+<h3 class="h3">title03</h3>
+```
+
+*/
+
+/*
+#styleguide
+古い見出し
+
+これは昔の見出しです。
+
+@todo
+@非推奨
+
+```
+<h1>title01</h1>
+```
+*/
+
+/*
+
+#colors
+
+@primary #33ccaa
+@secondary #aa55cc
+@primary-text #cccccc
+
+
+*/
+
+html {
+  font-size: $base-fontsize;
+}
+
+//text
+body {
+  @include fontsize(14);
+  font-family: $font-sans-serif;
+  font-weight: $base-fontweight;
+  color: $text-color;
+  background-color: $white;
+}
+
+a {
+  @include unstyled-link;
+  color: $primary-color;
+  transition: $duration-fast;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid rgba($text-color, 1);
+  margin: 1em auto;
+  padding: 0;
+}
+
+input,
+button,
+textarea,
+select {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  outline: none;
+}
+
+::selection {
+  background: $secondary-color;
+  color: $white;
+}
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//

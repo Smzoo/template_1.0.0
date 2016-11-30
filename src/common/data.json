@@ -1,0 +1,15 @@
+{
+  "name": "site title",
+  "description": "this is my site",
+  "author": "Okiniirinoao - Yuto Usui",
+  "title": "site title",
+  "sepalate": " | ",
+  "lang": "ja",
+  "domain": "http://my-special-url.com/",
+  "query": "?var=20161111",
+  "developDir": "src/",
+  "sp": false,
+  "ogp": {
+    "image": "screenshot.png"
+  }
+}

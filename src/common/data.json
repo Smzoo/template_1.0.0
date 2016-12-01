@@ -10,6 +10,7 @@
   "developDir": "src/",
   "sp": false,
   "ogp": {
+    "insert": true,
     "image": "screenshot.png"
   }
 }

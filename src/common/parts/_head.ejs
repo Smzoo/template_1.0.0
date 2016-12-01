@@ -42,7 +42,7 @@
     <meta name="format-detection" content="telephone=no,address=no,email=no">
   %>
 
-
+  <% if(data.ogp.insert) { %>
   <!-- ogp -->
   <meta name="twitter:title" content="<%= page.title + data.sepalate + data.title %>">
   <meta name="twitter:image" content="<%= page.ogp.image %>">
@@ -64,6 +64,7 @@
   <meta property="og:image" content="<%= page.ogp.image %>">
   <meta property="og:type" content="<%= page.ogp.type %>">
   <meta property="og:site_name" content="<%= data.title %>">
+  <% } %>
 
 
   <!-- canonical -->

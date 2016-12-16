@@ -199,12 +199,3 @@ gulp.task('delete', function () {
   gulp.src('release/01')
     del(['release/**/*.LCK', 'release/**/*_notes', 'release/**/Templates/']);
 });
-    .pipe(gulp.dest('release/01'));
-});
-
-gulp.task('release.clean', ['release.copy'], function () {
-  return gulp.src('release/01')
-    del(['release/**/*.LCK', 'release/**/*_notes', 'release/**/Templates/']);
-});
-
-gulp.task('release', ['release.copy', 'release.clean']);

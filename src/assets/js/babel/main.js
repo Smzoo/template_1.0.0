@@ -1,4 +1,6 @@
+'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 (function ($) {
 
@@ -32,13 +34,12 @@
     //
     // Returns the jQuery object
     function fnPjax(selector, container, options) {
-      var context = this
+      var context = this;
       return this.on('click.pjax', selector, function (event) {
-        var opts = $.extend({}, optionsFor(container, options))
-        if (!opts.container)
-          opts.container = $(this).attr('data-pjax') || context
-        handleClick(event, opts)
-      })
+        var opts = $.extend({}, optionsFor(container, options));
+        if (!opts.container) opts.container = $(this).attr('data-pjax') || context;
+        handleClick(event, opts);
+      });
     }
 
     // Public: pjax on click handler
@@ -61,44 +62,39 @@
     //
     // Returns nothing.
     function handleClick(event, container, options) {
-      options = optionsFor(container, options)
+      options = optionsFor(container, options);
 
-      var link = event.currentTarget
+      var link = event.currentTarget;
 
-      if (link.tagName.toUpperCase() !== 'A')
-        throw "$.fn.pjax or $.pjax.click requires an anchor element"
+      if (link.tagName.toUpperCase() !== 'A') throw "$.fn.pjax or $.pjax.click requires an anchor element";
 
       // Middle click, cmd click, and ctrl click should open
       // links in a new tab as normal.
-      if (event.which > 1 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
-        return
+      if (event.which > 1 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
       // Ignore cross origin links
-      if (location.protocol !== link.protocol || location.hostname !== link.hostname)
-        return
+      if (location.protocol !== link.protocol || location.hostname !== link.hostname) return;
 
       // Ignore case when a hash is being tacked on the current URL
-      if (link.href.indexOf('#') > -1 && stripHash(link) == stripHash(location))
-        return
+      if (link.href.indexOf('#') > -1 && stripHash(link) == stripHash(location)) return;
 
       // Ignore event with default prevented
-      if (event.isDefaultPrevented())
-        return
+      if (event.isDefaultPrevented()) return;
 
       var defaults = {
         url: link.href,
         container: $(link).attr('data-pjax'),
         target: link
-      }
+      };
 
-      var opts = $.extend({}, defaults, options)
-      var clickEvent = $.Event('pjax:click')
-      $(link).trigger(clickEvent, [opts])
+      var opts = $.extend({}, defaults, options);
+      var clickEvent = $.Event('pjax:click');
+      $(link).trigger(clickEvent, [opts]);
 
       if (!clickEvent.isDefaultPrevented()) {
-        pjax(opts)
-        event.preventDefault()
-        $(link).trigger('pjax:clicked', [opts])
+        pjax(opts);
+        event.preventDefault();
+        $(link).trigger('pjax:clicked', [opts]);
       }
     }
 
@@ -118,20 +114,19 @@
     //
     // Returns nothing.
     function handleSubmit(event, container, options) {
-      options = optionsFor(container, options)
+      options = optionsFor(container, options);
 
-      var form = event.currentTarget
-      var $form = $(form)
+      var form = event.currentTarget;
+      var $form = $(form);
 
-      if (form.tagName.toUpperCase() !== 'FORM')
-        throw "$.pjax.submit requires a form element"
+      if (form.tagName.toUpperCase() !== 'FORM') throw "$.pjax.submit requires a form element";
 
       var defaults = {
         type: ($form.attr('method') || 'GET').toUpperCase(),
         url: $form.attr('action'),
         container: $form.attr('data-pjax'),
         target: form
-      }
+      };
 
       if (defaults.type !== 'GET' && window.FormData !== undefined) {
         defaults.data = new FormData(form);
@@ -147,9 +142,9 @@
         defaults.data = $(form).serializeArray();
       }
 
-      pjax($.extend({}, defaults, options))
+      pjax($.extend({}, defaults, options));
 
-      event.preventDefault()
+      event.preventDefault();
     }
 
     // Loads a URL with ajax, puts the response body inside a container,
@@ -172,117 +167,112 @@
     //
     // Returns whatever $.ajax returns.
     function pjax(options) {
-      options = $.extend(true, {}, $.ajaxSettings, pjax.defaults, options)
+      options = $.extend(true, {}, $.ajaxSettings, pjax.defaults, options);
 
       if ($.isFunction(options.url)) {
-        options.url = options.url()
+        options.url = options.url();
       }
 
-      var target = options.target
+      var target = options.target;
 
-      var hash = parseURL(options.url).hash
+      var hash = parseURL(options.url).hash;
 
-      var context = options.context = findContainerFor(options.container)
+      var context = options.context = findContainerFor(options.container);
 
       // We want the browser to maintain two separate internal caches: one
       // for pjax'd partial page loads and one for normal page loads.
       // Without adding this secret parameter, some browsers will often
       // confuse the two.
-      if (!options.data) options.data = {}
+      if (!options.data) options.data = {};
       if ($.isArray(options.data)) {
         options.data.push({
           name: '_pjax',
           value: context.selector
-        })
+        });
       } else {
-        options.data._pjax = context.selector
+        options.data._pjax = context.selector;
       }
 
       function fire(type, args, props) {
-        if (!props) props = {}
-        props.relatedTarget = target
-        var event = $.Event(type, props)
-        context.trigger(event, args)
-        return !event.isDefaultPrevented()
+        if (!props) props = {};
+        props.relatedTarget = target;
+        var event = $.Event(type, props);
+        context.trigger(event, args);
+        return !event.isDefaultPrevented();
       }
 
-      var timeoutTimer
+      var timeoutTimer;
 
       options.beforeSend = function (xhr, settings) {
         // No timeout for non-GET requests
         // Its not safe to request the resource again with a fallback method.
         if (settings.type !== 'GET') {
-          settings.timeout = 0
+          settings.timeout = 0;
         }
 
-        xhr.setRequestHeader('X-PJAX', 'true')
-        xhr.setRequestHeader('X-PJAX-Container', context.selector)
+        xhr.setRequestHeader('X-PJAX', 'true');
+        xhr.setRequestHeader('X-PJAX-Container', context.selector);
 
-        if (!fire('pjax:beforeSend', [xhr, settings]))
-          return false
+        if (!fire('pjax:beforeSend', [xhr, settings])) return false;
 
         if (settings.timeout > 0) {
           timeoutTimer = setTimeout(function () {
-            if (fire('pjax:timeout', [xhr, options]))
-              xhr.abort('timeout')
-          }, settings.timeout)
+            if (fire('pjax:timeout', [xhr, options])) xhr.abort('timeout');
+          }, settings.timeout);
 
           // Clear timeout setting so jquerys internal timeout isn't invoked
-          settings.timeout = 0
+          settings.timeout = 0;
         }
 
-        var url = parseURL(settings.url)
-        if (hash) url.hash = hash
-        options.requestUrl = stripInternalParams(url)
-      }
+        var url = parseURL(settings.url);
+        if (hash) url.hash = hash;
+        options.requestUrl = stripInternalParams(url);
+      };
 
       options.complete = function (xhr, textStatus) {
-        if (timeoutTimer)
-          clearTimeout(timeoutTimer)
+        if (timeoutTimer) clearTimeout(timeoutTimer);
 
-        fire('pjax:complete', [xhr, textStatus, options])
+        fire('pjax:complete', [xhr, textStatus, options]);
 
-        fire('pjax:end', [xhr, options])
-      }
+        fire('pjax:end', [xhr, options]);
+      };
 
       options.error = function (xhr, textStatus, errorThrown) {
-        var container = extractContainer("", xhr, options)
+        var container = extractContainer("", xhr, options);
 
-        var allowed = fire('pjax:error', [xhr, textStatus, errorThrown, options])
+        var allowed = fire('pjax:error', [xhr, textStatus, errorThrown, options]);
         if (options.type == 'GET' && textStatus !== 'abort' && allowed) {
-          locationReplace(container.url)
+          locationReplace(container.url);
         }
-      }
+      };
 
       options.success = function (data, status, xhr) {
         var previousState = pjax.state;
 
         // If $.pjax.defaults.version is a function, invoke it first.
         // Otherwise it can be a static string.
-        var currentVersion = (typeof $.pjax.defaults.version === 'function') ?
-          $.pjax.defaults.version() :
-          $.pjax.defaults.version
+        var currentVersion = typeof $.pjax.defaults.version === 'function' ? $.pjax.defaults.version() : $.pjax.defaults.version;
 
-        var latestVersion = xhr.getResponseHeader('X-PJAX-Version')
+        var latestVersion = xhr.getResponseHeader('X-PJAX-Version');
 
-        var container = extractContainer(data, xhr, options)
+        var container = extractContainer(data, xhr, options);
 
-        var url = parseURL(container.url)
+        var url = parseURL(container.url);
         if (hash) {
-          url.hash = hash
-          container.url = url.href
+          url.hash = hash;
+          container.url = url.href;
         }
 
         // If there is a layout version mismatch, hard load the new url
         if (currentVersion && latestVersion && currentVersion !== latestVersion) {
-          locationReplace(container.url)
-          return
+          locationReplace(container.url);
+          return;
         }
 
         // If the new response is missing a body, hard load the page
         if (!container.contents) {
-          locationReplace(container.url)
-          return
+          locationReplace(container.url);
+          return;
         }
 
         pjax.state = {
@@ -292,56 +282,55 @@
           container: context.selector,
           fragment: options.fragment,
           timeout: options.timeout
-        }
+        };
 
         if (options.push || options.replace) {
-          window.history.replaceState(pjax.state, container.title, container.url)
+          window.history.replaceState(pjax.state, container.title, container.url);
         }
 
         // Only blur the focus if the focused element is within the container.
-        var blurFocus = $.contains(options.container, document.activeElement)
+        var blurFocus = $.contains(options.container, document.activeElement);
 
         // Clear out any focused controls before inserting new page contents.
         if (blurFocus) {
           try {
-            document.activeElement.blur()
+            document.activeElement.blur();
           } catch (e) {}
         }
 
-        if (container.title) document.title = container.title
+        if (container.title) document.title = container.title;
 
         fire('pjax:beforeReplace', [container.contents, options], {
           state: pjax.state,
           previousState: previousState
-        })
-        context.html(container.contents)
+        });
+        context.html(container.contents);
 
         // FF bug: Won't autofocus fields that are inserted via JS.
         // This behavior is incorrect. So if theres no current focus, autofocus
         // the last field.
         //
         // http://www.w3.org/html/wg/drafts/html/master/forms.html
-        var autofocusEl = context.find('input[autofocus], textarea[autofocus]').last()[0]
+        var autofocusEl = context.find('input[autofocus], textarea[autofocus]').last()[0];
         if (autofocusEl && document.activeElement !== autofocusEl) {
           autofocusEl.focus();
         }
 
-        executeScriptTags(container.scripts)
+        executeScriptTags(container.scripts);
 
-        var scrollTo = options.scrollTo
+        var scrollTo = options.scrollTo;
 
         // Ensure browser scrolls to the element referenced by the URL anchor
         if (hash) {
-          var name = decodeURIComponent(hash.slice(1))
-          var target = document.getElementById(name) || document.getElementsByName(name)[0]
-          if (target) scrollTo = $(target).offset().top
+          var name = decodeURIComponent(hash.slice(1));
+          var target = document.getElementById(name) || document.getElementsByName(name)[0];
+          if (target) scrollTo = $(target).offset().top;
         }
 
-        if (typeof scrollTo == 'number') $(window).scrollTop(scrollTo)
+        if (typeof scrollTo == 'number') $(window).scrollTop(scrollTo);
 
-        fire('pjax:success', [data, status, xhr, options])
-      }
-
+        fire('pjax:success', [data, status, xhr, options]);
+      };
 
       // Initialize pjax.state for the initial page load. Assume we're
       // using the container and options of the link we're loading for the
@@ -355,29 +344,29 @@
           container: context.selector,
           fragment: options.fragment,
           timeout: options.timeout
-        }
-        window.history.replaceState(pjax.state, document.title)
+        };
+        window.history.replaceState(pjax.state, document.title);
       }
 
       // Cancel the current request if we're already pjaxing
-      abortXHR(pjax.xhr)
+      abortXHR(pjax.xhr);
 
-      pjax.options = options
-      var xhr = pjax.xhr = $.ajax(options)
+      pjax.options = options;
+      var xhr = pjax.xhr = $.ajax(options);
 
       if (xhr.readyState > 0) {
         if (options.push && !options.replace) {
           // Cache current container element before replacing it
-          cachePush(pjax.state.id, cloneContents(context))
+          cachePush(pjax.state.id, cloneContents(context));
 
-          window.history.pushState(null, "", options.requestUrl)
+          window.history.pushState(null, "", options.requestUrl);
         }
 
-        fire('pjax:start', [xhr, options])
-        fire('pjax:send', [xhr, options])
+        fire('pjax:start', [xhr, options]);
+        fire('pjax:send', [xhr, options]);
       }
 
-      return pjax.xhr
+      return pjax.xhr;
     }
 
     // Public: Reload current page with pjax.
@@ -389,9 +378,9 @@
         push: false,
         replace: true,
         scrollTo: false
-      }
+      };
 
-      return pjax($.extend(defaults, optionsFor(container, options)))
+      return pjax($.extend(defaults, optionsFor(container, options)));
     }
 
     // Internal: Hard replace current state with url.
@@ -401,25 +390,24 @@
     //
     // Returns nothing.
     function locationReplace(url) {
-      window.history.replaceState(null, "", pjax.state.url)
-      window.location.replace(url)
+      window.history.replaceState(null, "", pjax.state.url);
+      window.location.replace(url);
     }
 
-
-    var initialPop = true
-    var initialURL = window.location.href
-    var initialState = window.history.state
+    var initialPop = true;
+    var initialURL = window.location.href;
+    var initialState = window.history.state;
 
     // Initialize $.pjax.state if possible
     // Happens when reloading a page and coming forward from a different
     // session history.
     if (initialState && initialState.container) {
-      pjax.state = initialState
+      pjax.state = initialState;
     }
 
     // Non-webkit browsers don't fire an initial popstate event
     if ('state' in window.history) {
-      initialPop = false
+      initialPop = false;
     }
 
     // popstate handler takes care of the back and forward buttons
@@ -430,44 +418,44 @@
 
       // Hitting back or forward should override any pending PJAX request.
       if (!initialPop) {
-        abortXHR(pjax.xhr)
+        abortXHR(pjax.xhr);
       }
 
-      var previousState = pjax.state
-      var state = event.state
-      var direction
+      var previousState = pjax.state;
+      var state = event.state;
+      var direction;
 
       if (state && state.container) {
         // When coming forward from a separate history session, will get an
         // initial pop with a state we are already at. Skip reloading the current
         // page.
-        if (initialPop && initialURL == state.url) return
+        if (initialPop && initialURL == state.url) return;
 
         if (previousState) {
           // If popping back to the same state, just skip.
           // Could be clicking back from hashchange rather than a pushState.
-          if (previousState.id === state.id) return
+          if (previousState.id === state.id) return;
 
           // Since state IDs always increase, we can deduce the navigation direction
-          direction = previousState.id < state.id ? 'forward' : 'back'
+          direction = previousState.id < state.id ? 'forward' : 'back';
         }
 
-        var cache = cacheMapping[state.id] || []
+        var cache = cacheMapping[state.id] || [];
         var container = $(cache[0] || state.container),
-          contents = cache[1]
+            contents = cache[1];
 
         if (container.length) {
           if (previousState) {
             // Cache current container before replacement and inform the
             // cache which direction the history shifted.
-            cachePop(direction, previousState.id, cloneContents(container))
+            cachePop(direction, previousState.id, cloneContents(container));
           }
 
           var popstateEvent = $.Event('pjax:popstate', {
             state: state,
             direction: direction
-          })
-          container.trigger(popstateEvent)
+          });
+          container.trigger(popstateEvent);
 
           var options = {
             id: state.id,
@@ -477,33 +465,33 @@
             fragment: state.fragment,
             timeout: state.timeout,
             scrollTo: false
-          }
+          };
 
           if (contents) {
-            container.trigger('pjax:start', [null, options])
+            container.trigger('pjax:start', [null, options]);
 
-            pjax.state = state
-            if (state.title) document.title = state.title
+            pjax.state = state;
+            if (state.title) document.title = state.title;
             var beforeReplaceEvent = $.Event('pjax:beforeReplace', {
               state: state,
               previousState: previousState
-            })
-            container.trigger(beforeReplaceEvent, [contents, options])
-            container.html(contents)
+            });
+            container.trigger(beforeReplaceEvent, [contents, options]);
+            container.html(contents);
 
-            container.trigger('pjax:end', [null, options])
+            container.trigger('pjax:end', [null, options]);
           } else {
-            pjax(options)
+            pjax(options);
           }
 
           // Force reflow/relayout before the browser tries to restore the
           // scroll position.
-          container[0].offsetHeight
+          container[0].offsetHeight;
         } else {
-          locationReplace(location.href)
+          locationReplace(location.href);
         }
       }
-      initialPop = false
+      initialPop = false;
     }
 
     // Fallback version of main pjax function for browsers that don't
@@ -512,60 +500,61 @@
     // Returns nothing since it retriggers a hard form submission.
     function fallbackPjax(options) {
       var url = $.isFunction(options.url) ? options.url() : options.url,
-        method = options.type ? options.type.toUpperCase() : 'GET'
+          method = options.type ? options.type.toUpperCase() : 'GET';
 
       var form = $('<form>', {
         method: method === 'GET' ? 'GET' : 'POST',
         action: url,
         style: 'display:none'
-      })
+      });
 
       if (method !== 'GET' && method !== 'POST') {
         form.append($('<input>', {
           type: 'hidden',
           name: '_method',
           value: method.toLowerCase()
-        }))
+        }));
       }
 
-      var data = options.data
+      var data = options.data;
       if (typeof data === 'string') {
         $.each(data.split('&'), function (index, value) {
-          var pair = value.split('=')
+          var pair = value.split('=');
           form.append($('<input>', {
             type: 'hidden',
             name: pair[0],
             value: pair[1]
-          }))
-        })
+          }));
+        });
       } else if ($.isArray(data)) {
         $.each(data, function (index, value) {
           form.append($('<input>', {
             type: 'hidden',
             name: value.name,
             value: value.value
-          }))
-        })
-      } else if (typeof data === 'object') {
-        var key
-        for (key in data)
+          }));
+        });
+      } else if ((typeof data === 'undefined' ? 'undefined' : _typeof(data)) === 'object') {
+        var key;
+        for (key in data) {
           form.append($('<input>', {
             type: 'hidden',
             name: key,
             value: data[key]
-          }))
+          }));
+        }
       }
 
-      $(document.body).append(form)
-      form.submit()
+      $(document.body).append(form);
+      form.submit();
     }
 
     // Internal: Abort an XmlHttpRequest if it hasn't been completed,
     // also removing its event handlers.
     function abortXHR(xhr) {
       if (xhr && xhr.readyState < 4) {
-        xhr.onreadystatechange = $.noop
-        xhr.abort()
+        xhr.onreadystatechange = $.noop;
+        xhr.abort();
       }
     }
 
@@ -576,25 +565,25 @@
     //
     // Returns Number.
     function uniqueId() {
-      return (new Date).getTime()
+      return new Date().getTime();
     }
 
     function cloneContents(container) {
-      var cloned = container.clone()
-        // Unmark script tags as already being eval'd so they can get executed again
-        // when restored from cache. HAXX: Uses jQuery internal method.
+      var cloned = container.clone();
+      // Unmark script tags as already being eval'd so they can get executed again
+      // when restored from cache. HAXX: Uses jQuery internal method.
       cloned.find('script').each(function () {
-        if (!this.src) jQuery._data(this, 'globalEval', false)
-      })
-      return [container.selector, cloned.contents()]
+        if (!this.src) jQuery._data(this, 'globalEval', false);
+      });
+      return [container.selector, cloned.contents()];
     }
 
     // Internal: Strip internal query params from parsed URL.
     //
     // Returns sanitized url.href String.
     function stripInternalParams(url) {
-      url.search = url.search.replace(/([?&])(_pjax|_)=[^&]*/g, '')
-      return url.href.replace(/\?($|#)/, '$1')
+      url.search = url.search.replace(/([?&])(_pjax|_)=[^&]*/g, '');
+      return url.href.replace(/\?($|#)/, '$1');
     }
 
     // Internal: Parse URL components and returns a Locationish object.
@@ -603,9 +592,9 @@
     //
     // Returns HTMLAnchorElement that acts like Location.
     function parseURL(url) {
-      var a = document.createElement('a')
-      a.href = url
-      return a
+      var a = document.createElement('a');
+      a.href = url;
+      return a;
     }
 
     // Internal: Return the `href` component of given URL object with the hash
@@ -615,7 +604,7 @@
     //
     // Returns String
     function stripHash(location) {
-      return location.href.replace(/#.*/, '')
+      return location.href.replace(/#.*/, '');
     }
 
     // Internal: Build options Object for arguments.
@@ -637,24 +626,20 @@
     // Returns options Object.
     function optionsFor(container, options) {
       // Both container and options
-      if (container && options)
-        options.container = container
+      if (container && options) options.container = container;
 
       // First argument is options Object
-      else if ($.isPlainObject(container))
-        options = container
+      else if ($.isPlainObject(container)) options = container;
 
-      // Only container
-      else
-        options = {
-          container: container
-        }
+        // Only container
+        else options = {
+            container: container
+          };
 
       // Find and validate container
-      if (options.container)
-        options.container = findContainerFor(options.container)
+      if (options.container) options.container = findContainerFor(options.container);
 
-      return options
+      return options;
     }
 
     // Internal: Find container element for a variety of inputs.
@@ -666,16 +651,16 @@
     //
     // Returns a jQuery object whose context is `document` and has a selector.
     function findContainerFor(container) {
-      container = $(container)
+      container = $(container);
 
       if (!container.length) {
-        throw "no pjax container for " + container.selector
+        throw "no pjax container for " + container.selector;
       } else if (container.selector !== '' && container.context === document) {
-        return container
+        return container;
       } else if (container.attr('id')) {
-        return $('#' + container.attr('id'))
+        return $('#' + container.attr('id'));
       } else {
-        throw "cant get selector for pjax container!"
+        throw "cant get selector for pjax container!";
       }
     }
 
@@ -693,7 +678,7 @@
     }
 
     function parseHTML(html) {
-      return $.parseHTML(html, document, true)
+      return $.parseHTML(html, document, true);
     }
 
     // Internal: Extracts container and metadata from response.
@@ -709,70 +694,67 @@
     // Returns an Object with url, title, and contents keys.
     function extractContainer(data, xhr, options) {
       var obj = {},
-        fullDocument = /<html/i.test(data)
+          fullDocument = /<html/i.test(data);
 
       // Prefer X-PJAX-URL header if it was set, otherwise fallback to
       // using the original requested url.
-      var serverUrl = xhr.getResponseHeader('X-PJAX-URL')
-      obj.url = serverUrl ? stripInternalParams(parseURL(serverUrl)) : options.requestUrl
+      var serverUrl = xhr.getResponseHeader('X-PJAX-URL');
+      obj.url = serverUrl ? stripInternalParams(parseURL(serverUrl)) : options.requestUrl;
 
       // Attempt to parse response html into elements
       if (fullDocument) {
-        var $head = $(parseHTML(data.match(/<head[^>]*>([\s\S.]*)<\/head>/i)[0]))
-        var $body = $(parseHTML(data.match(/<body[^>]*>([\s\S.]*)<\/body>/i)[0]))
+        var $head = $(parseHTML(data.match(/<head[^>]*>([\s\S.]*)<\/head>/i)[0]));
+        var $body = $(parseHTML(data.match(/<body[^>]*>([\s\S.]*)<\/body>/i)[0]));
       } else {
-        var $head = $body = $(parseHTML(data))
+        var $head = $body = $(parseHTML(data));
       }
 
       // If response data is empty, return fast
-      if ($body.length === 0)
-        return obj
+      if ($body.length === 0) return obj;
 
       // If there's a <title> tag in the header, use it as
       // the page's title.
-      obj.title = findAll($head, 'title').last().text()
+      obj.title = findAll($head, 'title').last().text();
 
       if (options.fragment) {
         // If they specified a fragment, look for it in the response
         // and pull it out.
         if (options.fragment === 'body') {
-          var $fragment = $body
+          var $fragment = $body;
         } else {
-          var $fragment = findAll($body, options.fragment).first()
+          var $fragment = findAll($body, options.fragment).first();
         }
 
         if ($fragment.length) {
-          obj.contents = options.fragment === 'body' ? $fragment : $fragment.contents()
+          obj.contents = options.fragment === 'body' ? $fragment : $fragment.contents();
 
           // If there's no title, look for data-title and title attributes
           // on the fragment
-          if (!obj.title)
-            obj.title = $fragment.attr('title') || $fragment.data('title')
+          if (!obj.title) obj.title = $fragment.attr('title') || $fragment.data('title');
         }
-
       } else if (!fullDocument) {
-        obj.contents = $body
+        obj.contents = $body;
       }
 
       // Clean up any <title> tags
       if (obj.contents) {
         // Remove any parent title elements
         obj.contents = obj.contents.not(function () {
-          return $(this).is('title')
-        })
+          return $(this).is('title');
+        });
 
         // Then scrub any titles from their descendants
-        obj.contents.find('title').remove()
+        obj.contents.find('title').remove();
 
         // Gather all script[src] elements
-        obj.scripts = findAll(obj.contents, 'script[src]').remove()
-        obj.contents = obj.contents.not(obj.scripts)
+        obj.scripts = findAll(obj.contents, 'script[src]').remove();
+        obj.contents = obj.contents.not(obj.scripts);
       }
 
       // Trim any whitespace off the title
-      if (obj.title) obj.title = $.trim(obj.title)
+      if (obj.title) obj.title = $.trim(obj.title);
 
-      return obj
+      return obj;
     }
 
     // Load an execute scripts using standard script request.
@@ -784,29 +766,29 @@
     //
     // Returns nothing.
     function executeScriptTags(scripts) {
-      if (!scripts) return
+      if (!scripts) return;
 
-      var existingScripts = $('script[src]')
+      var existingScripts = $('script[src]');
 
       scripts.each(function () {
-        var src = this.src
+        var src = this.src;
         var matchedScripts = existingScripts.filter(function () {
-          return this.src === src
-        })
-        if (matchedScripts.length) return
+          return this.src === src;
+        });
+        if (matchedScripts.length) return;
 
-        var script = document.createElement('script')
-        var type = $(this).attr('type')
-        if (type) script.type = type
-        script.src = $(this).attr('src')
-        document.head.appendChild(script)
-      })
+        var script = document.createElement('script');
+        var type = $(this).attr('type');
+        if (type) script.type = type;
+        script.src = $(this).attr('src');
+        document.head.appendChild(script);
+      });
     }
 
     // Internal: History DOM caching class.
-    var cacheMapping = {}
-    var cacheForwardStack = []
-    var cacheBackStack = []
+    var cacheMapping = {};
+    var cacheForwardStack = [];
+    var cacheBackStack = [];
 
     // Push previous state id and container contents into the history
     // cache. Should be called in conjunction with `pushState` to save the
@@ -817,14 +799,14 @@
     //
     // Returns nothing.
     function cachePush(id, value) {
-      cacheMapping[id] = value
-      cacheBackStack.push(id)
+      cacheMapping[id] = value;
+      cacheBackStack.push(id);
 
       // Remove all entries in forward history stack after pushing a new page.
-      trimCacheStack(cacheForwardStack, 0)
+      trimCacheStack(cacheForwardStack, 0);
 
       // Trim back history stack to max cache length.
-      trimCacheStack(cacheBackStack, pjax.defaults.maxCacheLength)
+      trimCacheStack(cacheBackStack, pjax.defaults.maxCacheLength);
     }
 
     // Shifts cache from directional history cache. Should be
@@ -837,23 +819,22 @@
     //
     // Returns nothing.
     function cachePop(direction, id, value) {
-      var pushStack, popStack
-      cacheMapping[id] = value
+      var pushStack, popStack;
+      cacheMapping[id] = value;
 
       if (direction === 'forward') {
-        pushStack = cacheBackStack
-        popStack = cacheForwardStack
+        pushStack = cacheBackStack;
+        popStack = cacheForwardStack;
       } else {
-        pushStack = cacheForwardStack
-        popStack = cacheBackStack
+        pushStack = cacheForwardStack;
+        popStack = cacheBackStack;
       }
 
-      pushStack.push(id)
-      if (id = popStack.pop())
-        delete cacheMapping[id]
+      pushStack.push(id);
+      if (id = popStack.pop()) delete cacheMapping[id];
 
       // Trim whichever stack we just pushed to to max cache length.
-      trimCacheStack(pushStack, pjax.defaults.maxCacheLength)
+      trimCacheStack(pushStack, pjax.defaults.maxCacheLength);
     }
 
     // Trim a cache stack (either cacheBackStack or cacheForwardStack) to be no
@@ -864,8 +845,9 @@
     //
     // Returns nothing.
     function trimCacheStack(stack, length) {
-      while (stack.length > length)
-        delete cacheMapping[stack.shift()]
+      while (stack.length > length) {
+        delete cacheMapping[stack.shift()];
+      }
     }
 
     // Public: Find version identifier for the initial page load.
@@ -873,9 +855,9 @@
     // Returns String version or undefined.
     function findVersion() {
       return $('meta').filter(function () {
-        var name = $(this).attr('http-equiv')
-        return name && name.toUpperCase() === 'X-PJAX-VERSION'
-      }).attr('content')
+        var name = $(this).attr('http-equiv');
+        return name && name.toUpperCase() === 'X-PJAX-VERSION';
+      }).attr('content');
     }
 
     // Install pjax functions on $.pjax to enable pushState behavior.
@@ -888,13 +870,13 @@
     //
     // Returns nothing.
     function enable() {
-      $.fn.pjax = fnPjax
-      $.pjax = pjax
-      $.pjax.enable = $.noop
-      $.pjax.disable = disable
-      $.pjax.click = handleClick
-      $.pjax.submit = handleSubmit
-      $.pjax.reload = pjaxReload
+      $.fn.pjax = fnPjax;
+      $.pjax = pjax;
+      $.pjax.enable = $.noop;
+      $.pjax.disable = disable;
+      $.pjax.click = handleClick;
+      $.pjax.submit = handleSubmit;
+      $.pjax.reload = pjaxReload;
       $.pjax.defaults = {
         timeout: 650,
         push: true,
@@ -904,8 +886,8 @@
         scrollTo: 0,
         maxCacheLength: 20,
         version: findVersion
-      }
-      $(window).on('popstate.pjax', onPjaxPopstate)
+      };
+      $(window).on('popstate.pjax', onPjaxPopstate);
     }
 
     // Disable pushState behavior.
@@ -921,43 +903,38 @@
     // Returns nothing.
     function disable() {
       $.fn.pjax = function () {
-        return this
-      }
-      $.pjax = fallbackPjax
-      $.pjax.enable = enable
-      $.pjax.disable = $.noop
-      $.pjax.click = $.noop
-      $.pjax.submit = $.noop
+        return this;
+      };
+      $.pjax = fallbackPjax;
+      $.pjax.enable = enable;
+      $.pjax.disable = $.noop;
+      $.pjax.click = $.noop;
+      $.pjax.submit = $.noop;
       $.pjax.reload = function () {
-        window.location.reload()
-      }
+        window.location.reload();
+      };
 
-      $(window).off('popstate.pjax', onPjaxPopstate)
+      $(window).off('popstate.pjax', onPjaxPopstate);
     }
-
 
     // Add the state property to jQuery's event object so we can use it in
     // $(window).bind('popstate')
-    if ($.inArray('state', $.event.props) < 0)
-      $.event.props.push('state')
+    if ($.inArray('state', $.event.props) < 0) $.event.props.push('state');
 
     // Is pjax supported by this browser?
-    $.support.pjax =
-      window.history && window.history.pushState && window.history.replaceState &&
-      // pushState isn't reliable on iOS until 5.
-      !navigator.userAgent.match(/((iPod|iPhone|iPad).+\bOS\s+[1-4]\D|WebApps\/.+CFNetwork)/)
+    $.support.pjax = window.history && window.history.pushState && window.history.replaceState &&
+    // pushState isn't reliable on iOS until 5.
+    !navigator.userAgent.match(/((iPod|iPhone|iPad).+\bOS\s+[1-4]\D|WebApps\/.+CFNetwork)/);
 
-    $.support.pjax ? enable() : disable()
-
+    $.support.pjax ? enable() : disable();
   }
   pjaxMain();
-
 
   //
   // main
   //
   /////////////////////
-  function main() {
+  var main = function main() {
 
     // common variable
     //////////////////////////////////////
@@ -965,26 +942,21 @@
     var wrap = $('#wrap');
     var mainArea = $('#main');
 
-
-
     // load add class
     //////////////////////////////
     function loadLate() {
       wrap.find('.js-late').addClass('active');
     }
 
-
     /////////////////////////////////
     //
     // load event
     //
     /////////////////////////////////
-    $window.on('load', function(){
+    $window.on('load', function () {
       loadLate();
       owlMain();
     });
-
-
 
     // navigation
     ////////////////////////
@@ -999,44 +971,33 @@
 
         event.preventDefault();
         menuAction();
-
       });
-
 
       //
       // close window
-      naviWrap.on('click', function() {
-        if($(this).hasClass('active')) {
+      naviWrap.on('click', function () {
+        if ($(this).hasClass('active')) {
 
           menuAction();
-
         }
       });
 
-
-      naviWrap.find('.header_navi-target').on('click', function(event){
+      naviWrap.find('.header_navi-target').on('click', function (event) {
         event.stopPropagation();
       });
-      naviWrap.find('.header_navi-list').on('click', function(event){
+      naviWrap.find('.header_navi-list').on('click', function (event) {
         event.stopPropagation();
       });
-
 
       //
       // action
-      function menuAction () {
+      function menuAction() {
         naviTrigger.toggleClass('active');
         mainArea.toggleClass('off');
         naviWrap.stop().toggleClass('active');
       }
-
-
-
-
     }
     menuTrigger();
-
-
 
     // home tab
     /////////////////////////
@@ -1046,8 +1007,7 @@
       var trigger = tabWrap.find('.js-tab-trigger');
       var tabItem = tabWrap.find('.js-tab-item');
 
-
-      trigger.on('click', function(e){
+      trigger.on('click', function (e) {
         e.preventDefault();
 
         // trigger
@@ -1056,13 +1016,9 @@
 
         // panel item
         tabItem.removeClass('active').filter(anchor).addClass('active');
-
       });
-
     }
     homeTab();
-
-
 
     //audio play
     ///////////////////////////
@@ -1070,23 +1026,22 @@
       $('.js-play').on('click', function (e) {
         e.preventDefault;
 
-        if($(this).hasClass('active')) { // stop
+        if ($(this).hasClass('active')) {
+          // stop
 
           $(this).removeClass('active').next('.js-audio').get(0).pause();
           $(this).prev().find('img').removeClass('active');
-
-        } else { // play
+        } else {
+          // play
 
           $(this).addClass('active').next('.js-audio').get(0).play();
           $(this).prev().find('img').addClass('active');
-
         }
       });
     }
     audioplayer();
 
-// js-music-jacket
-
+    // js-music-jacket
 
 
     //owl
@@ -1097,26 +1052,23 @@
         var owl = $("#js-hero-slide");
 
         owl.owlCarousel({
-          items : 1,
-          itemsDesktop : [1000,1],
-          itemsDesktopSmall : [900,1],
-          itemsTablet: [600,1],
-          itemsMobile : false,
-          navigation : false,
-          pagination : false,
-          singleItem : true,
-          transitionStyle : "backSlide",
+          items: 1,
+          itemsDesktop: [1000, 1],
+          itemsDesktopSmall: [900, 1],
+          itemsTablet: [600, 1],
+          itemsMobile: false,
+          navigation: false,
+          pagination: false,
+          singleItem: true,
+          transitionStyle: "backSlide",
           addClassActive: true,
           autoPlay: 5000,
           stopOnHover: true
-          });
+        });
 
         owlNavi(owl);
-
-
       };
       slide01();
-
 
       //owl
       /////////////////////////
@@ -1124,42 +1076,35 @@
         var owl = $("#js-music-slide");
 
         owl.owlCarousel({
-          items : 1,
-          itemsDesktop : [1000,1],
-          itemsDesktopSmall : [900,1],
-          itemsTablet: [600,1],
-          itemsMobile : false,
-          navigation : false,
-          pagination : false,
-          singleItem : true,
+          items: 1,
+          itemsDesktop: [1000, 1],
+          itemsDesktopSmall: [900, 1],
+          itemsTablet: [600, 1],
+          itemsMobile: false,
+          navigation: false,
+          pagination: false,
+          singleItem: true,
           addClassActive: true,
-          transitionStyle : "fade",
+          transitionStyle: "fade",
           stopOnHover: true
-          });
+        });
 
         owlNavi(owl);
-
-
       };
       slide02();
 
-
       function owlNavi(owl) {
         // Custom Navigation Events
-        owl.next('.js-slide-navi').find(".js-next").click(function(event){
+        owl.next('.js-slide-navi').find(".js-next").click(function (event) {
           event.preventDefault();
           owl.trigger('owl.next');
         });
-        owl.next('.js-slide-navi').find(".js-prev").click(function(event){
+        owl.next('.js-slide-navi').find(".js-prev").click(function (event) {
           event.preventDefault();
           owl.trigger('owl.prev');
         });
       }
-
     }
-
-
-
 
     function pjaxSet() {
 
@@ -1169,12 +1114,10 @@
         e.preventDefault();
         var nextUrl = $(this).attr('href');
 
-
         if ($window.width() < 1024) {
           $('.menu_trigger').removeClass('active');
           $('#js-menu_wrap').fadeOut(450);
         }
-
 
         $("#content").animate({
           left: -200,
@@ -1189,18 +1132,13 @@
         });
       });
 
-
       $(document).on('pjax:send', function () {
         $('#js-loader').fadeIn(350);
       });
 
-      $(document).on('pjax:complete', function () {
-
-      });
-
+      $(document).on('pjax:complete', function () {});
 
       $(document).on('pjax:end', function () {
-
 
         $("#content").animate({
           left: 0,
@@ -1209,25 +1147,11 @@
         $('#js-loader').fadeOut(450);
         $('#content').find('img').parents('a').addClass('pjax');
       });
-
     }
     pjaxSet();
-
-
-
-
-
-
-
-  }
+  };
   main();
-
 })(jQuery);
-
-
-
-
-
 
 //
 // fonts
@@ -1237,7 +1161,7 @@ function googleFonts() {
 
   WebFontConfig = {
     google: {
-      families: ['Raleway:100,300','Josefin+Slab:700']
+      families: ['Raleway:100,300', 'Josefin+Slab:700']
     }
   };
 
@@ -1251,5 +1175,3 @@ function googleFonts() {
   })();
 }
 googleFonts();
-
-

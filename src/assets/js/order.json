@@ -5,6 +5,6 @@
     "/plugin/imagelightbox.js",
     "/plugin/jquery.ba-throttle-debounce.min.js",
     "/plugin/owl.carousel.min.js",
-    "/main.js"
+    "/babel/main.js"
   ]
 }

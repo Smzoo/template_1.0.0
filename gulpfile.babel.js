@@ -2,7 +2,7 @@
 //start
 var gulp = require('gulp');
 
-//var docs = './git/template_1.0.0';
+var docs = '.';
 //
 var distDir =  docs + '/dist';
 var srcDir =  docs + '/src';

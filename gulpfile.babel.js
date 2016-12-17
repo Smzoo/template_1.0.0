@@ -29,6 +29,7 @@ var distPath = {
 var plumber = require('gulp-plumber'); // error escape
 var rename = require('gulp-rename'); // rename
 var sourcemaps = require('gulp-sourcemaps'); // sourcemap
+var gulpSequence = require('gulp-sequence'); // sequence
 //
 var autoprefixer = require('gulp-autoprefixer'); // prefix
 var sass = require('gulp-compass'); // Sass compass
@@ -103,19 +104,15 @@ for (var i = 0; i < jsJson.order.length; i++) {
   jsList[i] = path.jsPath + jsJson.order[i];
 }
 //
-gulp.task('js.babel', function() {
-  return gulp.src(path.jsPath + '/main.js')
-    .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
-    .pipe(babel({presets: ['es2015']}));
-});
-gulp.task('js.concat', ['js.babel'], function() {
+gulp.task('js.concat', function() {
   return gulp.src(jsList.join(',').split(','))
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
     .pipe(concat('index.js'))
+    .pipe(babel())
     .pipe(gulp.dest(distPath.jsPath + '/'));
 });
-//
-gulp.task('js.uglify', ['js.concat'], function() {
+
+gulp.task('js.uglify', function() {
   return gulp.src(distPath.jsPath + '/index.js')
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
     //.pipe(sourcemaps.init())
@@ -127,7 +124,7 @@ gulp.task('js.uglify', ['js.concat'], function() {
     .pipe(notify('js task finished'));
 });
 //
-gulp.task('js', ['js.babel', 'js.concat', 'js.uglify']);
+gulp.task('js', gulpSequence('js.concat', 'js.uglify'));
 //
 //
 //

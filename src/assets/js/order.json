@@ -1,7 +1,7 @@
 
 {
   "order": [
-    "/library/jquery-2.1.4.min.js",
+    "/library/jquery-2.1.4.js",
     "/plugin/imagelightbox.js",
     "/plugin/jquery.ba-throttle-debounce.min.js",
     "/plugin/owl.carousel.min.js",

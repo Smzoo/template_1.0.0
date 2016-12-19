@@ -1,4 +1,14 @@
 @charset "UTF-8";
+@font-face {
+  font-family: "MyYuGothicM";
+  font-weight: normal;
+  src: local("YuGothic-Medium"), local("Yu Gothic Medium"), local("YuGothic-Regular");
+}
+@font-face {
+  font-family: "MyYuGothicM";
+  font-weight: bold;
+  src: local("YuGothic-Bold"), local("Yu Gothic");
+}
 /* Sass Document */
 @keyframes hvr-push {
   50% {
@@ -68,7 +78,8 @@
   padding: 0;
   font: inherit;
   font-style: normal;
-  font-weight: 300;
+  font-weight: normal;
+  font-weight: inherit;
   list-style: none;
   text-decoration: none;
   vertical-align: baseline;
@@ -186,6 +197,10 @@ template {
   display: none;
 }
 
+a {
+  cursor: pointer;
+}
+
 /*
 #styleguide
 見出しのスタイル＊ タイトルをここに書く。
@@ -231,10 +246,19 @@ html {
 body {
   font-size: 14px;
   font-size: 1rem;
-  font-family: -apple-system, ‘Helvetica Neue’, "Hiragino Sans", "ヒラギノ角ゴシック", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN", Meiryo, メイリオ, "YuGothic Medium", "游ゴシック Medium", Arial, sans-serif;
-  font-weight: 300;
+  font-family: -apple-system, BlinkMacSystemFont, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic ProN", MyYuGothicM, YuGothic, メイリオ, Meiryo, "Noto Sans Japanese", "Noto Sans CJK JP", sans-serif;
+  font-weight: 400;
   color: #3f3a39;
   background-color: #ffffff;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "pwid";
+}
+.safari body {
+  font-feature-settings: "pkna";
+}
+.ie body {
+  font-family: "Helvetica", Meiryo, sans-serif;
 }
 
 a {
@@ -243,6 +267,7 @@ a {
   cursor: inherit;
   color: #d6101c;
   transition: 0.25s;
+  cursor: pointer;
 }
 a:active, a:focus {
   outline: none;
@@ -276,8 +301,12 @@ select {
 }
 
 ::selection {
-  background: #fd3a45;
-  color: #ffffff;
+  background: #00a0e9;
+  color: #3f3a39;
+}
+
+.wrap {
+  overflow: hidden;
 }
 
 .btn {
@@ -339,7 +368,7 @@ select {
   flex-direction: column;
 }
 
-.f-base {
+.f-full {
   flex: 1 1;
 }
 
@@ -357,6 +386,12 @@ select {
 
 .f-stretch-s {
   align-self: stretch;
+}
+
+.f-middle-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .f-container {
@@ -830,6 +865,9 @@ select {
 .u-text-justify {
   text-align: justify !important;
 }
+.ie .u-text-justify {
+  text-justify: inter-ideograph;
+}
 
 .u-left {
   float: left !important;
@@ -1114,17 +1152,17 @@ select {
   overflow: hidden;
   text-align: left;
   text-transform: capitalize;
-  background-image: url('../images/?1471503190');
+  background-image: url('../images/?1480492324');
   background-repeat: no-repeat;
   background-position: 50% 50%;
 }
 
 .u-font-serif {
-  font-family: "ヒラギノ明朝 ProN W3", 游明朝, YuMincho, "Hiragino Mincho ProN", HG明朝E, "MS P明朝", "MS 明朝", Georgia, "Times New Roman", Times, serif !important;
+  font-family: 游明朝, YuMincho, "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", HG明朝E, "MS P明朝", "MS 明朝", Georgia, "Times New Roman", Times, serif !important;
 }
 
 .u-font-sans-serif {
-  font-family: -apple-system, ‘Helvetica Neue’, "Hiragino Sans", "ヒラギノ角ゴシック", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN", Meiryo, メイリオ, "YuGothic Medium", "游ゴシック Medium", Arial, sans-serif !important;
+  font-family: -apple-system, BlinkMacSystemFont, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic ProN", MyYuGothicM, YuGothic, メイリオ, Meiryo, "Noto Sans Japanese", "Noto Sans CJK JP", sans-serif !important;
 }
 
 .u-font-mono {
@@ -1132,7 +1170,7 @@ select {
 }
 
 .u-font-tsukushi {
-  font-family: "Tsukushi A Round Gothic", "筑紫A丸ゴシック", "ヒラギノ丸ゴ ProN", "Hiragino Maru Gothic ProN", -apple-system, Meiryo, メイリオ !important;
+  font-family: "Tsukushi A Round Gothic", "筑紫A丸ゴシック", "ヒラギノ丸ゴ ProN", "Hiragino Maru Gothic ProN", -apple-system, BlinkMacSystemFont, Meiryo, メイリオ !important;
 }
 
 .u-fz-xs {

@@ -4,6 +4,20 @@
 //
 // =========================================================
 //
+// / display
+// / justyfy
+// / align
+// / wrap
+// / column
+// / item
+// / full width
+// / align self
+//
+// / grid framework
+//
+// ---------------------------------------------------------
+// display
+// ---------------------------------------------------------
 //
 .f-flex {
   display: flex;
@@ -12,7 +26,9 @@
 .f-in-flex {
   display: inline-flex;
 }
-
+// ---------------------------------------------------------
+// justyfy content
+// ---------------------------------------------------------
 //
 //
 .f-left {
@@ -34,7 +50,9 @@
 .f-between {
   justify-content: space-between;
 }
-
+// ---------------------------------------------------------
+// align item
+// ---------------------------------------------------------
 //
 //
 .f-top {
@@ -48,25 +66,33 @@
 .f-middle {
   align-items: center;
 }
-
+// ---------------------------------------------------------
+// item wrap
+// ---------------------------------------------------------
 //
 //
 .f-wrap {
   flex-flow: wrap;
 }
-
+// ---------------------------------------------------------
+// column
+// ---------------------------------------------------------
 //
 //
 .f-col {
   flex-direction: column;
 }
-
+// ---------------------------------------------------------
+// one thing full of width
+// ---------------------------------------------------------
 //
 //
-.f-base {
+.f-full {
   flex: 1 1;
 }
-
+// ---------------------------------------------------------
+// align self
+// ---------------------------------------------------------
 //
 //
 .f-top-s {
@@ -84,15 +110,26 @@
 .f-stretch-s {
   align-self: stretch;
 }
-
+// ---------------------------------------------------------
+// middle of the earch
+// ---------------------------------------------------------
 //
 //
+.f-middle-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 // =========================================================
 //
 // flex grid framework
 //
 // =========================================================
 //
+//
+// / container ... flex item wrap
+// / item ........ flex item
+// / off ......... flex item offset
 //
 $flex-grid-columns: 12 !default;
 $flex-grid-gutter: 1rem !default;
@@ -152,7 +189,7 @@ $fg-breakpoints: ( (xs), (sm, $pad-size), (md, $pc-size), (lg, $large-size)) !de
  * .#{ $fg-class-off }-[namespace]-[number] for pushing a col a specific number of columns (e.g. 1-11 by default)
  */
 
-@mixin grid-base( $namespace) {
+@mixin grid-base($namespace) {
   .#{ $fg-class-col }-#{$namespace} {
     @extend %#{ $fg-class-col }-flex;
   }
@@ -163,7 +200,7 @@ $fg-breakpoints: ( (xs), (sm, $pad-size), (md, $pc-size), (lg, $large-size)) !de
   }
 }
 
-@mixin grid-sizes( $namespace) {
+@mixin grid-sizes($namespace) {
   // Run the loop for as many columns as speficied
   //////////////////////
   @for $i from 1 through $flex-grid-columns {
@@ -192,19 +229,19 @@ $fg-breakpoints: ( (xs), (sm, $pad-size), (md, $pc-size), (lg, $large-size)) !de
 
 @each $val in $fg-breakpoints {
   $namespace: nth($val, 1);
-  @include grid-base( $namespace);
+  @include grid-base($namespace);
 }
 
 @each $val in $fg-breakpoints {
   @if length($val)==1 {
     $namespace: nth($val, 1);
-    @include grid-sizes( $namespace);
+    @include grid-sizes($namespace);
   }
   @else {
     $namespace: nth($val, 1);
     $size: nth($val, 2);
     @media only screen and (min-width: #{$size}) {
-      @include grid-sizes( $namespace);
+      @include grid-sizes($namespace);
     }
   }
 }

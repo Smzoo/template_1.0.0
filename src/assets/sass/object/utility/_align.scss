@@ -18,6 +18,9 @@
 
 .u-text-justify {
   text-align: justify !important;
+  .ie & {
+    text-justify: inter-ideograph;
+  }
 }
 
 .u-left {

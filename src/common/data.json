@@ -8,6 +8,7 @@
   "domain": "http://my-special-url.com/",
   "query": "?var=20161111",
   "developDir": "src/",
+  "canonical": false,
   "sp": false,
   "ogp": {
     "insert": true,

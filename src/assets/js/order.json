@@ -2,9 +2,11 @@
 {
   "order": [
     "/library/jquery-2.1.4.js",
-    "/plugin/imagelightbox.js",
+    "/plugin/jquery.easing.js",
     "/plugin/jquery.ba-throttle-debounce.min.js",
-    "/plugin/owl.carousel.min.js",
+    "/plugin/owl.carousel.js",
+    "/plugin/perfect-scrollbar.jquery.js",
+    "/plugin/css_browser_selector.js",
     "/babel/main.js"
   ]
 }

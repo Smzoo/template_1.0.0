@@ -43,19 +43,29 @@ html {
   font-size: $base-fontsize;
 }
 
-//text
 body {
-  @include fontsize(14);
+  @include fontsize();
   font-family: $font-sans-serif;
   font-weight: $base-fontweight;
   color: $text-color;
   background-color: $white;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "pwid";
+  //
+  .safari & {
+    font-feature-settings : "pkna"; // follow back -- ios10 safari10
+  }
+  .ie & {
+    font-family: $font-ie;
+  }
 }
 
 a {
   @include unstyled-link;
   color: $primary-color;
   transition: $duration-fast;
+  cursor: pointer;
 }
 
 img {
@@ -86,8 +96,12 @@ select {
 }
 
 ::selection {
-  background: $secondary-color;
-  color: $white;
+  background: $thirdry-color;
+  color: $text-color;
+}
+
+.wrap {
+  overflow: hidden;
 }
 
 //

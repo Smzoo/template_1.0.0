@@ -1,27 +1,39 @@
+// =========================================================
+//
+// breadcrumb
+//
+// =========================================================
+//
+//
+.c-breadcrumb_wrap {
+  background-color: #dfe1df;
+}
+
 .c-breadcrumb {
-  margin-top: 15px;
-  margin-left: 10px;
-  //
-  @media (min-width: $pc-size) {
-    width: 1192px;
-    margin-right: auto;
-    margin-left: auto;
-  }
+  width: 915px;
+  height: 30px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .c-breadcrumb_item {
+  position: relative;
   //
   + .c-breadcrumb_item {
-    margin-left: .5em;
-    @include fontsize(14);
-  }
-  //
-  &.c-breadcrumb_item--arrow {
-    width: 8px;
-    height: 8px;
-    border-right: 1px solid currentColor;
-    border-bottom: 1px solid currentColor;
-    transform: rotate(-45deg);
+    margin-left: 2em;
+    //
+    &::after {
+      content: '';
+      position: absolute;
+      left: -1.3em;
+      top: calc(50% - 1px);
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-right: 1px solid currentColor;
+      border-bottom: 1px solid currentColor;
+      transform: rotate(-45deg);
+    }
   }
   //
   &:last-child {
@@ -33,7 +45,9 @@
 
 .c-breadcrumb_target {
   color: $black;
+  @include fontsize(10);
   text-decoration: underline;
+  //
   &:hover {
     color: $primary-color;
     text-decoration: none;

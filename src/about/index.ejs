@@ -29,7 +29,7 @@
     },
     singleCss: [],
     singleJs: [],
-    modifier: 'home'
+    modifier: 'about'
   };
 
 
@@ -65,7 +65,7 @@
   <%- include(path.re +'common/parts/_header', {page:page, path:path}) %>
 
   <%- include(path.re +'common/parts/_breadcrumb', {page:page, path:path, breadcrumb: breadcrumb}) %>
-  <main>
+  <main class="">
     <p>absolute path: <%= path.ab %></p>
     <p>root path: <%= path.re %></p>
     <p>absolute sp path: <%= path.sp %></p>

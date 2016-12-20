@@ -64,8 +64,11 @@
 //
 //
 @import "object/component/_button";
-@import "object/component/_tab";
 @import "object/component/_headding";
+@import "object/component/_article";
+@import "object/component/_tab";
+@import "object/component/_slider";
+
 //
 //
 //
@@ -87,6 +90,7 @@
 //
 // ----- plugin ----- //
 //
+@import "object/project/plugin/owl/_owl.carousel";
 //@import "object/project/plugin/_lightbox";
 //
 //

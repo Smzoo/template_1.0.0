@@ -10,3 +10,10 @@
   @include fontsize(42);
   font-weight: 600;
 }
+
+
+.h2 {
+  font-style: italic;
+  @include fontsize(28);
+  color: #acacac;
+}

@@ -100,18 +100,84 @@
 
     // carousel
     /////////////////////////////
-    var carouselInit = function () {
-      $('#js-hero').owlCarousel({
-        animateOut: 'fadeOut',
-        items: 1,
-        margin: 0,
-        stagePadding: 0,
-        smartSpeed: 450,
-        loop: true,
-        autoplay: true,
-        autoplayTimeout: 3000,
-        autoplayHoverPause: true
-      });
+    var carouselInit = () => {
+
+      var fadeSingle = () => {
+        $('.js-slider-fade').owlCarousel({
+          animateOut: 'fadeOut',
+          items: 1,
+          margin: 0,
+          stagePadding: 0,
+          smartSpeed: 450,
+          loop: true,
+          autoplay: true,
+          autoplayTimeout: 3000,
+          autoplayHoverPause: true
+        });
+      }
+      fadeSingle();
+
+      var slideBasic = () => {
+        $('.js-slider-basic').owlCarousel({
+          loop:true,
+          margin:10,
+          nav:true,
+          responsive:{
+              0:{
+                  items:1
+              },
+              600:{
+                  items:3
+              },
+              1000:{
+                  items:5
+              }
+          }
+        });
+      }
+      slideBasic();
+
+      var slideCenter = () => {
+        $('.js-slider-center').owlCarousel({
+          center: true,
+          items: 2,
+          loop: true,
+          margin: 10,
+          smartSpeed: 1000,
+          autoplay: true,
+          autoplayTimeout: 1500,
+          autoplayHoverPause: true
+        });
+      }
+      slideCenter();
+
+      var customNavi = () => {
+
+        var owl = $('.js-slider-my-nav');
+
+        owl.owlCarousel({
+          loop: true,
+          margin: 10,
+          smartSpeed: 600,
+          autoplay: true,
+          autoplayTimeout: 1500,
+          autoplayHoverPause: true
+        });
+
+        owl.next().find('.js-slider-nav-prev').on('click', function(e) {
+          e.preventDefault();
+          owl.trigger('prev.owl.carousel');
+        });
+
+        owl.next().find('.js-slider-nav-next').on('click', function(e) {
+          e.preventDefault();
+          owl.trigger('next.owl.carousel');
+        });
+
+      }
+      customNavi();
+
+
     };
 
 

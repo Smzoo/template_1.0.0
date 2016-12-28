@@ -7,6 +7,6 @@
     "/plugin/owl.carousel.js",
     "/plugin/perfect-scrollbar.jquery.js",
     "/plugin/css_browser_selector.js",
-    "/babel/main.js"
+    "/babel/main.min.js"
   ]
 }

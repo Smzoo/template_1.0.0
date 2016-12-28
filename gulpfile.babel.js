@@ -112,13 +112,17 @@ gulp.task('js.babel', function() {
        var cutLength = path.basename.length - 6;
        path.basename = path.basename.slice(0, cutLength);
     }))
+    .pipe(gulp.dest(path.jsPath + '/babel/'))
+    .pipe(uglify())
+    .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest(path.jsPath + '/babel/'));
 });
 gulp.task('js.concat', function() {
   return gulp.src(jsList.join(',').split(','))
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
     .pipe(concat('index.js'))
-    .pipe(gulp.dest(distPath.jsPath + '/'));
+    .pipe(gulp.dest(distPath.jsPath + '/'))
+    .pipe(notify('js task finished'));
 });
 
 gulp.task('js.uglify', function() {
@@ -134,7 +138,7 @@ gulp.task('js.uglify', function() {
 });
 //
 gulp.task('js', function(callback) {
-  gulpSequence('js.babel', 'js.concat', 'js.uglify')(callback)
+  gulpSequence('js.babel', 'js.concat')(callback)
 });
 //
 //

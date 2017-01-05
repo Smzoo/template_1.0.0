@@ -83,7 +83,10 @@ gulp.task('sass', function () {
       image: path.imgPath
     }))
     //.pipe(frontnote({ out: path.cssPath }))
-    .pipe(autoprefixer('last 3 version'))
+    .pipe(autoprefixer({
+      browsers: ['last 2 version', 'iOS >= 8.1', 'Android >= 4.4.4'],
+      cascade: false
+    }))
     .pipe(csscomb())
     .pipe(gulp.dest(distPath.cssPath + '/'))
     .pipe(cssmin())

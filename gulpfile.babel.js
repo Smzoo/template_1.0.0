@@ -113,9 +113,6 @@ gulp.task('js.babel', function() {
        path.basename = path.basename.slice(0, cutLength);
     }))
     .pipe(gulp.dest(path.jsPath + '/babel/'))
-    .pipe(uglify())
-    .pipe(rename({ suffix: '.min' }))
-    .pipe(gulp.dest(path.jsPath + '/babel/'));
 });
 gulp.task('js.concat', function() {
   return gulp.src(jsList.join(',').split(','))
@@ -128,9 +125,9 @@ gulp.task('js.concat', function() {
 gulp.task('js.uglify', function() {
   return gulp.src(distPath.jsPath + '/index.js')
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
-    //.pipe(sourcemaps.init())
+    .pipe(sourcemaps.init())
     .pipe(uglify())
-    //.pipe(sourcemaps.write())
+    .pipe(sourcemaps.write())
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest(distPath.jsPath + '/'))
     .pipe(browser.reload({ stream: true }))
@@ -138,7 +135,7 @@ gulp.task('js.uglify', function() {
 });
 //
 gulp.task('js', function(callback) {
-  gulpSequence('js.babel', 'js.concat')(callback)
+  gulpSequence('js.babel', 'js.concat', 'js.uglify')(callback)
 });
 //
 //

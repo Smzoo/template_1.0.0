@@ -59,7 +59,7 @@
       var tabWrap = $('#js-tab');
       var trigger = tabWrap.find('.js-tab-trigger');
       var tabItem = tabWrap.find('.js-tab-item');
-      var anchor;
+      var anchor = void 0;
 
       trigger.on('click', function (e) {
         e.preventDefault();
@@ -201,7 +201,12 @@
     /////////////////////////////
     var scrollFadeIn = function scrollFadeIn(target) {
 
-      var fadeInItem, itemTopPosition, scrollHeight, windowHeight, itemHeight, outDistance;
+      var fadeInItem = void 0,
+          itemTopPosition = void 0,
+          scrollHeight = void 0,
+          windowHeight = void 0,
+          itemHeight = void 0,
+          outDistance = void 0;
 
       var viewPosition = function viewPosition() {
         fadeInItem = target.children();

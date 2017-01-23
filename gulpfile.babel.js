@@ -40,6 +40,7 @@ let frontnote = require('gulp-frontnote'); // style guide
 let uglify = require('gulp-uglify'); // js min
 let babel = require('gulp-babel'); // es6
 let concat = require('gulp-concat'); // concat ... order.JSON
+let eslint = require('gulp-eslint'); // eslint
 //
 let ejs = require('gulp-ejs'); // ejs template
 let minifyHtml = require('gulp-minify-html'); // html min
@@ -110,6 +111,9 @@ for (let i = 0; i < jsJson.order.length; i++) {
 gulp.task('js.babel', function() {
   return gulp.src(path.jsPath + '/**/*babel.js')
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
+    .pipe(eslint({useEslintrc: true}))
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError())
     .pipe(babel())
     .pipe(rename(function (path) {
        let cutLength = path.basename.length - 6;
@@ -129,7 +133,7 @@ gulp.task('js.uglify', function() {
   return gulp.src(distPath.jsPath + '/index.js')
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
     .pipe(sourcemaps.init())
-    .pipe(uglify())
+    .pipe(uglify({preserveComments: 'some'}))
     .pipe(sourcemaps.write())
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest(distPath.jsPath + '/'))

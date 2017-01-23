@@ -6,35 +6,42 @@
   // main
   //
   /////////////////////
-  function main() {
+  var main = function main() {
 
     // common variable
     //////////////////////////////////////
-    var $window = $(window);
-    var wrap = $('#wrap');
-    var mainArea = $('#main');
+    var $window = $(window),
+        wrap = $('#wrap');
+    //    let mainArea = $('#main');
     //
     var windowW = $window.width();
-    var windowH = $window.height();
+    //    let windowH = $window.height();
     //
-    var padSize = 768;
-    var pcSize = 1280;
-    var largeSize = 1500;
-    var spMaxSize = padSize - 1;
-    var padMaxSize = pcSize - 1;
-    var pcMaxSize = largeSize - 1;
+    //    let padSize = 768;
+    //    let pcSize = 1280;
+    //    let largeSize = 1500;
+    //    let spMaxSize = padSize - 1;
+    //    let padMaxSize = pcSize - 1;
+    //    let pcMaxSize = largeSize - 1;
+
 
     // load add class
     //////////////////////////////
     var loadLate = function loadLate() {
+
       wrap.find('.js-late').addClass('is-active');
     };
 
     var loadWindow = function loadWindow() {
 
       var loading = function loading() {
-        setTimeout(wrap.addClass('is-active'), 100);
-        setTimeout(loadLate, 100);
+
+        setTimeout(function () {
+
+          wrap.addClass('is-active');
+        }, 100);
+
+        setTimeout(loadLate(), 100);
       };
 
       loading();
@@ -45,6 +52,7 @@
     var actionSpHeader = function actionSpHeader(target, navi) {
 
       target.on('click', function (e) {
+
         e.preventDefault();
         $(this).toggleClass('is-active');
 
@@ -56,12 +64,13 @@
     /////////////////////////
     var actionTab = function actionTab() {
 
-      var tabWrap = $('#js-tab');
-      var trigger = tabWrap.find('.js-tab-trigger');
-      var tabItem = tabWrap.find('.js-tab-item');
+      var tabWrap = $('#js-tab'),
+          trigger = tabWrap.find('.js-tab-trigger'),
+          tabItem = tabWrap.find('.js-tab-item');
       var anchor = void 0;
 
       trigger.on('click', function (e) {
+
         e.preventDefault();
 
         // trigger
@@ -78,6 +87,7 @@
     var dropDownMenu = function dropDownMenu(target) {
 
       target.on('click', function (e) {
+
         e.preventDefault();
         $(this).toggleClass('is-active').next().stop().slideToggle(400, 'easeOutCubic');
       });
@@ -88,6 +98,7 @@
     var carouselInit = function carouselInit() {
 
       var fadeSingle = function fadeSingle() {
+
         $('.js-slider-fade').owlCarousel({
           animateOut: 'fadeOut',
           items: 1,
@@ -103,6 +114,7 @@
       fadeSingle();
 
       var slideBasic = function slideBasic() {
+
         $('.js-slider-basic').owlCarousel({
           loop: true,
           margin: 10,
@@ -123,6 +135,7 @@
       slideBasic();
 
       var slideCenter = function slideCenter() {
+
         $('.js-slider-center').owlCarousel({
           center: true,
           items: 2,
@@ -150,11 +163,13 @@
         });
 
         owl.next().find('.js-slider-nav-prev').on('click', function (e) {
+
           e.preventDefault();
           owl.trigger('prev.owl.carousel');
         });
 
         owl.next().find('.js-slider-nav-next').on('click', function (e) {
+
           e.preventDefault();
           owl.trigger('next.owl.carousel');
         });
@@ -163,6 +178,7 @@
     };
 
     var scrollBox = function scrollBox() {
+
       $('.js-scroll-box').perfectScrollbar({
         wheelSpeed: 0.8,
         minScrollbarLength: 100,
@@ -170,9 +186,10 @@
       });
     };
 
-    var scrollBoxUpdate = function scrollBoxUpdate() {
-      $('.js-scroll-box').perfectScrollbar('update');
-    };
+    //    let scrollBoxUpdate = () => {
+    //      $('.js-scroll-box').perfectScrollbar('update');
+    //    };
+
 
     // facebook plugin resize
     ///////////////////////////
@@ -180,15 +197,20 @@
 
       var fbBox = target.html();
       var timer = false;
-      var targetW = target.width();
+      //      let targetW = target.width();
       var w = windowW;
 
       $window.resize(function () {
+
         if (w != windowW) {
+
           if (timer !== false) {
+
             clearTimeout(timer);
           }
+
           timer = setTimeout(function () {
+
             target.html(fbBox);
             window.FB.XFBML.parse();
             w = $window.width();
@@ -205,10 +227,10 @@
           itemTopPosition = void 0,
           scrollHeight = void 0,
           windowHeight = void 0,
-          itemHeight = void 0,
           outDistance = void 0;
 
       var viewPosition = function viewPosition() {
+
         fadeInItem = target.children();
 
         fadeInItem.each(function () {
@@ -216,13 +238,14 @@
           itemTopPosition = $(this).offset().top;
           scrollHeight = $window.scrollTop();
           windowHeight = $window.height();
-          itemHeight = fadeInItem.height();
 
           outDistance = 30;
 
           if (scrollHeight > itemTopPosition - windowHeight + outDistance) {
+
             $(this).addClass('is-current');
           } else {
+
             $(this).removeClass('is-current');
           }
         });
@@ -230,6 +253,7 @@
       viewPosition();
 
       $window.on('scroll', $.throttle(1000 / 15, function () {
+
         viewPosition();
       }));
     };
@@ -240,6 +264,7 @@
     //
     /////////////////////////////////
     $window.on('load', function () {
+
       actionTab();
       actionSpHeader($('#js-header-trigger'), $('#js-sp-navi'));
       dropDownMenu($('.js-sp-btn', '#js-sp-navi'));
@@ -256,21 +281,23 @@
 
     // Process when the window resize is over
     //////////////////////////////
-    var finishResizeEvent = function finishResizeEvent() {
-      var timer = false;
+    //    let finishResizeEvent = () => {
+    //      let timer = false;
+    //
+    //      $window.resize(function() {
+    //        if (timer !== false) {
+    //          clearTimeout(timer);
+    //        }
+    //        timer = setTimeout(function() {
+    //          windowW = $window.width();
+    //          windowH = $window.height();
+    //          scrollBoxUpdate();
+    //        }, 300);
+    //      });
+    //
+    //    };
+    //    finishResizeEvent();
 
-      $window.resize(function () {
-        if (timer !== false) {
-          clearTimeout(timer);
-        }
-        timer = setTimeout(function () {
-          windowW = $window.width();
-          windowH = $window.height();
-          scrollBoxUpdate();
-        }, 300);
-      });
-    };
-    finishResizeEvent();
-  }
+  };
   main();
 })(jQuery);

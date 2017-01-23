@@ -1,75 +1,85 @@
 
 
-(function ($) {
+(function($) {
 
   //
   // main
   //
   /////////////////////
-  function main() {
+  const main = () => {
 
     // common variable
     //////////////////////////////////////
-    var $window = $(window);
-    var wrap = $('#wrap');
-    var mainArea = $('#main');
+    const $window = $(window),
+          wrap = $('#wrap');
+//    let mainArea = $('#main');
     //
-    var windowW = $window.width();
-    var windowH = $window.height();
+    let windowW = $window.width();
+//    let windowH = $window.height();
     //
-    var padSize = 768;
-    var pcSize = 1280;
-    var largeSize = 1500;
-    var spMaxSize = padSize - 1;
-    var padMaxSize = pcSize - 1;
-    var pcMaxSize = largeSize - 1;
-
-
-
+//    let padSize = 768;
+//    let pcSize = 1280;
+//    let largeSize = 1500;
+//    let spMaxSize = padSize - 1;
+//    let padMaxSize = pcSize - 1;
+//    let pcMaxSize = largeSize - 1;
 
 
     // load add class
     //////////////////////////////
-    var loadLate = function () {
+    const loadLate = () => {
+
       wrap.find('.js-late').addClass('is-active');
+
     };
 
 
-    var loadWindow = function () {
+    const loadWindow = () => {
 
-      var loading = function () {
-        setTimeout(wrap.addClass('is-active'), 100);
-        setTimeout(loadLate, 100);
+      const loading = () => {
+
+        setTimeout(() => {
+
+          wrap.addClass('is-active');
+
+        }, 100);
+
+        setTimeout(loadLate(), 100);
+
       };
 
       loading();
+
     };
 
 
     // show mobile navigation
     /////////////////////////////
-    var actionSpHeader = function(target,navi) {
+    const actionSpHeader = (target, navi) => {
 
       target.on('click', function(e) {
+
         e.preventDefault();
         $(this).toggleClass('is-active');
 
-        $(navi).stop().slideToggle(400,'easeOutCubic');
+        $(navi).stop().slideToggle(400, 'easeOutCubic');
 
       });
+
     };
 
 
     // home tab
     /////////////////////////
-    var actionTab = function () {
+    const actionTab = () => {
 
-      var tabWrap = $('#js-tab');
-      var trigger = tabWrap.find('.js-tab-trigger');
-      var tabItem = tabWrap.find('.js-tab-item');
-      var anchor;
+      const tabWrap = $('#js-tab'),
+            trigger = tabWrap.find('.js-tab-trigger'),
+            tabItem = tabWrap.find('.js-tab-item');
+      let anchor;
 
-      trigger.on('click', function(e){
+      trigger.on('click', function(e) {
+
         e.preventDefault();
 
         // trigger
@@ -84,25 +94,26 @@
     };
 
 
-
     // drop down action
     /////////////////////////////
-    var dropDownMenu = function (target) {
+    const dropDownMenu = (target) => {
 
       target.on('click', function(e) {
+
         e.preventDefault();
         $(this).toggleClass('is-active').next().stop().slideToggle(400, 'easeOutCubic');
+
       });
 
     };
 
 
-
     // carousel
     /////////////////////////////
-    var carouselInit = () => {
+    const carouselInit = () => {
 
-      var fadeSingle = () => {
+      const fadeSingle = () => {
+
         $('.js-slider-fade').owlCarousel({
           animateOut: 'fadeOut',
           items: 1,
@@ -114,30 +125,34 @@
           autoplayTimeout: 3000,
           autoplayHoverPause: true
         });
+
       }
       fadeSingle();
 
-      var slideBasic = () => {
+      const slideBasic = () => {
+
         $('.js-slider-basic').owlCarousel({
-          loop:true,
-          margin:10,
-          nav:true,
-          responsive:{
-              0:{
-                  items:1
-              },
-              600:{
-                  items:3
-              },
-              1000:{
-                  items:5
-              }
+          loop: true,
+          margin: 10,
+          nav: true,
+          responsive: {
+            0: {
+              items: 1
+            },
+            600: {
+              items: 3
+            },
+            1000: {
+              items: 5
+            }
           }
         });
+
       }
       slideBasic();
 
-      var slideCenter = () => {
+      const slideCenter = () => {
+
         $('.js-slider-center').owlCarousel({
           center: true,
           items: 2,
@@ -148,12 +163,13 @@
           autoplayTimeout: 1500,
           autoplayHoverPause: true
         });
+
       }
       slideCenter();
 
-      var customNavi = () => {
+      const customNavi = () => {
 
-        var owl = $('.js-slider-my-nav');
+        const owl = $('.js-slider-my-nav');
 
         owl.owlCarousel({
           loop: true,
@@ -165,13 +181,17 @@
         });
 
         owl.next().find('.js-slider-nav-prev').on('click', function(e) {
+
           e.preventDefault();
           owl.trigger('prev.owl.carousel');
+
         });
 
         owl.next().find('.js-slider-nav-next').on('click', function(e) {
+
           e.preventDefault();
           owl.trigger('next.owl.carousel');
+
         });
 
       }
@@ -181,84 +201,99 @@
     };
 
 
+    const scrollBox = () => {
 
-    var scrollBox = function () {
       $('.js-scroll-box').perfectScrollbar({
         wheelSpeed: 0.8,
         minScrollbarLength: 100,
         wheelPropagation: true
       });
+
     };
 
-    var scrollBoxUpdate = function () {
-      $('.js-scroll-box').perfectScrollbar('update');
-    };
+//    let scrollBoxUpdate = () => {
+//      $('.js-scroll-box').perfectScrollbar('update');
+//    };
 
 
     // facebook plugin resize
     ///////////////////////////
-    var fbResize = function (target) {
+    const fbResize = (target) => {
 
-      var fbBox = target.html();
-      var timer = false;
-      var targetW = target.width();
-      var w = windowW;
+      const fbBox = target.html();
+      let timer = false;
+//      let targetW = target.width();
+      let w = windowW;
 
       $window.resize(function() {
-        if(w != windowW) {
+
+        if (w != windowW) {
+
           if (timer !== false) {
+
             clearTimeout(timer);
+
           }
-          timer = setTimeout(function() {
+
+          timer = setTimeout(() => {
+
             target.html(fbBox);
             window.FB.XFBML.parse();
             w = $window.width();
+
           }, 500);
+
         }
 
       });
+
     };
 
 
     //scroll fadein contents
     /////////////////////////////
-    var scrollFadeIn = function (target) {
+    const scrollFadeIn = (target) => {
 
-      var fadeInItem,
+      let fadeInItem,
           itemTopPosition,
           scrollHeight,
           windowHeight,
-          itemHeight,
           outDistance;
 
-      var viewPosition = function () {
+      const viewPosition = () => {
+
         fadeInItem = target.children();
 
-        fadeInItem.each(function () {
+        fadeInItem.each(function() {
 
           itemTopPosition = $(this).offset().top;
           scrollHeight = $window.scrollTop();
           windowHeight = $window.height();
-          itemHeight = fadeInItem.height();
 
           outDistance = 30;
 
           if (scrollHeight > itemTopPosition - windowHeight + outDistance) {
+
             $(this).addClass('is-current');
+
           } else {
+
             $(this).removeClass('is-current');
+
           }
+
         });
+
       };
       viewPosition();
 
-      $window.on('scroll', $.throttle(1000 / 15, function () {
+      $window.on('scroll', $.throttle(1000 / 15, function() {
+
         viewPosition();
+
       }));
 
     };
-
-
 
 
     /////////////////////////////////
@@ -266,9 +301,10 @@
     // load event
     //
     /////////////////////////////////
-    $window.on('load', function(){
+    $window.on('load', () => {
+
       actionTab();
-      actionSpHeader($('#js-header-trigger'),$('#js-sp-navi'));
+      actionSpHeader($('#js-header-trigger'), $('#js-sp-navi'));
       dropDownMenu($('.js-sp-btn', '#js-sp-navi'));
       dropDownMenu($('.js-footer-btn', '#js-footer-navi'));
       scrollBox();
@@ -279,29 +315,28 @@
       loadWindow();
       //
       carouselInit();
+
     });
 
 
     // Process when the window resize is over
     //////////////////////////////
-    var finishResizeEvent = function () {
-      var timer = false;
-
-      $window.resize(function() {
-        if (timer !== false) {
-            clearTimeout(timer);
-        }
-        timer = setTimeout(function() {
-          windowW = $window.width();
-          windowH = $window.height();
-          scrollBoxUpdate();
-        }, 300);
-      });
-
-    };
-    finishResizeEvent();
-
-
+//    let finishResizeEvent = () => {
+//      let timer = false;
+//
+//      $window.resize(function() {
+//        if (timer !== false) {
+//          clearTimeout(timer);
+//        }
+//        timer = setTimeout(function() {
+//          windowW = $window.width();
+//          windowH = $window.height();
+//          scrollBoxUpdate();
+//        }, 300);
+//      });
+//
+//    };
+//    finishResizeEvent();
 
 
   }

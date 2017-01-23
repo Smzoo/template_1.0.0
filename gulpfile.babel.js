@@ -1,23 +1,23 @@
 //
 //start
-var gulp = require('gulp');
+let gulp = require('gulp');
 
-var docs = '.';
+let docs = '.';
 //
-var distDir =  docs + '/dist';
-var srcDir =  docs + '/src';
+let distDir =  docs + '/dist';
+let srcDir =  docs + '/src';
 //
-var assetsDir = srcDir + '/assets';
-var DistAssetsDir = distDir + '/assets';
+let assetsDir = srcDir + '/assets';
+let DistAssetsDir = distDir + '/assets';
 //
-var path = {
+let path = {
   'imgPath': assetsDir + '/images',
   'sassPath': assetsDir + '/sass',
   'cssPath': assetsDir + '/css',
   'jsPath': assetsDir + '/js'
 };
 //
-var distPath = {
+let distPath = {
   'imgPath': DistAssetsDir + '/images',
   'sassPath': DistAssetsDir + '/sass',
   'cssPath': DistAssetsDir + '/css',
@@ -26,36 +26,36 @@ var distPath = {
 //
 // plugin
 //
-var plumber = require('gulp-plumber'); // error escape
-var rename = require('gulp-rename'); // rename
-var sourcemaps = require('gulp-sourcemaps'); // sourcemap
-var gulpSequence = require('gulp-sequence'); // sequence
+let plumber = require('gulp-plumber'); // error escape
+let rename = require('gulp-rename'); // rename
+let sourcemaps = require('gulp-sourcemaps'); // sourcemap
+let gulpSequence = require('gulp-sequence'); // sequence
 //
-var autoprefixer = require('gulp-autoprefixer'); // prefix
-var sass = require('gulp-compass'); // Sass compass
-var csscomb = require('gulp-csscomb'); // css
-var cssmin = require('gulp-cssmin'); // css min
-var frontnote = require('gulp-frontnote'); // style guide
+let autoprefixer = require('gulp-autoprefixer'); // prefix
+let sass = require('gulp-compass'); // Sass compass
+let csscomb = require('gulp-csscomb'); // css
+let cssmin = require('gulp-cssmin'); // css min
+let frontnote = require('gulp-frontnote'); // style guide
 //
-var uglify = require('gulp-uglify'); // js min
-var babel = require('gulp-babel'); // es6
-var concat = require('gulp-concat'); // concat ... order.JSON
+let uglify = require('gulp-uglify'); // js min
+let babel = require('gulp-babel'); // es6
+let concat = require('gulp-concat'); // concat ... order.JSON
 //
-var ejs = require('gulp-ejs'); // ejs template
-var minifyHtml = require('gulp-minify-html'); // html min
+let ejs = require('gulp-ejs'); // ejs template
+let minifyHtml = require('gulp-minify-html'); // html min
 //
-var browser = require('browser-sync'); // browser start
+let browser = require('browser-sync'); // browser start
 //
-var imagemin = require('gulp-imagemin'); // image min
-var pngquant = require('imagemin-pngquant');
+let imagemin = require('gulp-imagemin'); // image min
+let pngquant = require('imagemin-pngquant');
 //
-var notify = require('gulp-notify'); // alert
-var watch = require("gulp-watch");  // watch
+let notify = require('gulp-notify'); // alert
+let watch = require("gulp-watch");  // watch
 //
-var del = require('del'); // delete
+let del = require('del'); // delete
 //
-var fs = require('graceful-fs'); // JSON load
-var cache = require('gulp-cached'); // cache
+let fs = require('graceful-fs'); // JSON load
+let cache = require('gulp-cached'); // cache
 //
 //
 //
@@ -100,10 +100,10 @@ gulp.task('sass', function () {
 //
 // js
 /////////////////////////////
-var jsJson = JSON.parse(fs.readFileSync(path.jsPath + '/order.json'));
-var jsList = [];
+let jsJson = JSON.parse(fs.readFileSync(path.jsPath + '/order.json'));
+let jsList = [];
 
-for (var i = 0; i < jsJson.order.length; i++) {
+for (let i = 0; i < jsJson.order.length; i++) {
   jsList[i] = path.jsPath + jsJson.order[i];
 }
 //
@@ -112,7 +112,7 @@ gulp.task('js.babel', function() {
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
     .pipe(babel())
     .pipe(rename(function (path) {
-       var cutLength = path.basename.length - 6;
+       let cutLength = path.basename.length - 6;
        path.basename = path.basename.slice(0, cutLength);
     }))
     .pipe(gulp.dest(path.jsPath + '/babel/'))

@@ -33,10 +33,13 @@ Temporary Items
 # DW Dreamweaver added files
 _notes
 _compareTemp
-configs/
+configs
 dwsync.xml
 dw_php_codehinting.config
 *.mno
 
 # sass
 .sass-cache
+
+# node
+node_modules

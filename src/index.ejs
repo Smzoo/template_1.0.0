@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <%
 // path function begin
 // - - - - - - - - - - - - - - - - - - - - - - - -
@@ -45,14 +44,6 @@ var page = {
 %><%- include(path.re +'common/parts/_head', {page:page, path:path}) %>
 <!-- header -->
 <%- include(path.re +'common/parts/_header', {page:page, path:path}) %>
-
-
-
-
-
-
-
-
 
       <main class="main <% if(page.modifier) { %> main--<%= page.modifier %><% } %>">
         <p>absolute path: <%= path.ab %></p>
@@ -180,26 +171,21 @@ var page = {
 
       </main>
 
-
-
-
-
-
-
-
-
 <!-- footer -->
-<%- include(path.re +'common/parts/_footer', {page:page, path:path}) %>
+<%- include(path.re +'common/parts/_footer', {page:page, path:path}) %><%
 
 
 
 
 
-
-<%
   // = = = = = = = = = = = = = = = = = = = =
   //
   // html end
   //
   // = = = = = = = = = = = = = = = = = = = =
+
+
+
+
+
 %>

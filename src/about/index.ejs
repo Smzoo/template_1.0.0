@@ -1,8 +1,8 @@
 <%
-  // path function begin
-  // - - - - - - - - - - - - - - - - - - - - - - - -
-  var absolutePath = data.domain + filename.split(data.developDir)[filename.split(data.developDir).length -1].replace('index.ejs','').replace('.ejs','.html');
-  var relativePath = '../'.repeat([absolutePath.replace(data.domain,'').split('/').length -1]);
+// path function begin
+// - - - - - - - - - - - - - - - - - - - - - - - -
+var absolutePath = data.domain + filename.split(data.developDir)[filename.split(data.developDir).length -1].replace('index.ejs','').replace('.ejs','.html');
+var relativePath = '../'.repeat([absolutePath.replace(data.domain,'').split('/').length -1]);
 %>
 
 

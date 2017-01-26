@@ -18,7 +18,8 @@ if (page.ogp.type.length == 0) {
 
 
 
-%><html lang="<%= data.lang %>">
+%><!DOCTYPE html>
+<html lang="<%= data.lang %>">
 <head>
   <!-- viewport -->
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -39,8 +40,7 @@ if (page.ogp.type.length == 0) {
   <title><%= title %></title>
   <meta name="description" content="<%= page.desc %>">
   <!-- sp user agent function disable-->
-  <meta name="format-detection" content="telephone=no,address=no,email=no">
-  <%#
+  <meta name="format-detection" content="telephone=no,address=no,email=no"><%#
 
 
 

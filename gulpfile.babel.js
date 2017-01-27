@@ -105,13 +105,16 @@ gulp.task('browser', () => {
 gulp.task('sass', () => {
   gulp.src(srcPath.sassPath + '/**/*.scss')
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
+    .pipe(frontnote({
+      out: srcPath.cssPath,
+      css:  './main.css'
+    }))
     .pipe(sass({
       config_file: 'config.rb',
       sass: srcPath.sassPath,
       css: srcPath.cssPath,
       image: srcPath.imgPath
     }))
-    //.pipe(frontnote({ out: srcPath.cssPath }))
     .pipe(autoprefixer({
       browsers: ['last 2 version', 'iOS >= 8.1', 'Android >= 4.4.4'],
       cascade: false

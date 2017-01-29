@@ -3,6 +3,8 @@
   "order": [
     "/library/jquery-2.1.4.js",
     "/plugin/jquery.easing.js",
+    "/plugin/hammer.min.js",
+    "/plugin/pace.min.js",
     "/plugin/jquery.ba-throttle-debounce.min.js",
     "/plugin/owl.carousel.js",
     "/plugin/perfect-scrollbar.jquery.js",

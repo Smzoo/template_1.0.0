@@ -79,7 +79,8 @@
       paceOptions = {
         ajax: false,
         document: false,
-        eventLag: false
+        eventLag: false,
+        restartOnPushState: true
       };
 
       Pace.on('done', function () {

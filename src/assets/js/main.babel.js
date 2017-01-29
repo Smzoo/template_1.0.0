@@ -1,68 +1,133 @@
-
-
 (function($) {
 
-  //
+  // common
+  ///////////////////
+  const DATA = {
+
+    $win: $(window),
+    $body: $('body'),
+
+    spW: 640,
+    tabW: 768,
+    breakPointPC: 1024,
+    scrollTop: 0,
+    scrollLeft: 0,
+
+    init: () => {
+
+      let self = this;
+      self.$win = $(window);
+      self.$body = $('body');
+      self.winW = self.$win.width();
+      self.winH = self.$win.height();
+      self.bodyH = self.$body.height();
+      self.isMini = self.$win.width() <= self.spW;
+      self.isTab = self.spW <= self.$win.width() && self.$win.width() <= self.tabW;
+      self.isPC = self.tabW <= self.$win.width() && self.$win.width() <= self.breakPointPC;
+
+      let resize = () => {
+
+        self.winW = self.$win.width();
+        self.winH = self.$win.height();
+        self.isMini = self.$win.width() <= self.spW;
+        self.isTab = self.spW <= self.$win.width() && self.$win.width() <= self.tabW;
+        self.isPC = self.tabW <= self.$win.width() && self.$win.width() <= self.breakPointPC;
+
+      }
+      resize();
+      self.$win.on('resize', () => {
+
+        resize();
+
+      });
+
+      let scroll = () => {
+
+        self.scrollTop = self.$win.scrollTop();
+        self.scrollLeft = self.$win.scrollLeft();
+
+      }
+      scroll();
+      self.$win.on('scroll', () => {
+
+        scroll();
+
+      });
+
+    },
+    transitionEnd: 'oTransitionEnd mozTransitionEnd webkitTransitionEnd transitionend'
+
+  };
+  DATA.init();
+
   // main
-  //
   /////////////////////
   const main = () => {
 
     // common variable
-    //////////////////////////////////////
-    const $window = $(window),
-          wrap = $('#wrap');
-//    let mainArea = $('#main');
-    //
-    let windowW = $window.width();
-//    let windowH = $window.height();
-    //
-//    let padSize = 768;
-//    let pcSize = 1280;
-//    let largeSize = 1500;
-//    let spMaxSize = padSize - 1;
-//    let padMaxSize = pcSize - 1;
-//    let pcMaxSize = largeSize - 1;
-
-
-    // load add class
     //////////////////////////////
-    const loadLate = () => {
+    const $wrap = $('#wrap');
 
-      wrap.find('.js-late').addClass('is-active');
+    const loading = () => {
+
+      setTimeout(() => {
+
+        $wrap.addClass('is-active').find('.js-late').addClass('is-active');
+
+      }, 100);
 
     };
 
 
-    const loadWindow = () => {
+    const pace = () => {
 
-      const loading = () => {
-
-        setTimeout(() => {
-
-          wrap.addClass('is-active');
-
-        }, 100);
-
-        setTimeout(loadLate(), 100);
-
+      paceOptions = {
+        ajax: false,
+        document: false,
+        eventLag: false
       };
 
-      loading();
+      Pace.on('done', () => {
 
-    };
+        DATA.$body.addClass('ready');
+
+      });
+
+    }
+    pace();
 
 
     // show mobile navigation
     /////////////////////////////
     const actionSpHeader = (target, navi) => {
 
-      target.on('click', function(e) {
+      const $spGnav = navi,
+            $spGnavBtn = target;
+
+      let isSpGnavOpen = false;
+
+      $spGnavBtn.on('click', function(e) {
 
         e.preventDefault();
-        $(this).toggleClass('is-active');
 
-        $(navi).stop().slideToggle(400, 'easeOutCubic');
+        if (!isSpGnavOpen) {
+
+          $('body').on('touchmove.noScroll', function(e) {
+
+            e.preventDefault();
+
+          });
+
+          $spGnav.addClass('is-open');
+          isSpGnavOpen = true;
+
+        } else {
+
+          $('body').off('.noScroll');
+          $spGnav.removeClass('is-open');
+          isSpGnavOpen = false;
+
+        }
 
       });
 
@@ -96,16 +161,16 @@
 
     // drop down action
     /////////////////////////////
-    const dropDownMenu = (target) => {
-
-      target.on('click', function(e) {
-
-        e.preventDefault();
-        $(this).toggleClass('is-active').next().stop().slideToggle(400, 'easeOutCubic');
-
-      });
-
-    };
+//    const dropDownMenu = (target) => {
+//
+//      target.on('click', function(e) {
+//
+//        e.preventDefault();
+//        $(this).toggleClass('is-active').next().stop().slideToggle(400, 'easeOutCubic');
+//
+//      });
+//
+//    };
 
 
     // carousel
@@ -218,36 +283,36 @@
 
     // facebook plugin resize
     ///////////////////////////
-    const fbResize = (target) => {
-
-      const fbBox = target.html();
-      let timer = false;
-//      let targetW = target.width();
-      let w = windowW;
-
-      $window.resize(function() {
-
-        if (w != windowW) {
-
-          if (timer !== false) {
-
-            clearTimeout(timer);
-
-          }
-
-          timer = setTimeout(() => {
-
-            target.html(fbBox);
-            window.FB.XFBML.parse();
-            w = $window.width();
-
-          }, 500);
-
-        }
-
-      });
-
-    };
+//    const fbResize = (target) => {
+//
+//      const fbBox = target.html();
+//      let timer = false;
+////      let targetW = target.width();
+//      let w = DATA.$winW;
+//
+//      DATA.$win.resize(function() {
+//
+//        if (w != DATA.$winW) {
+//
+//          if (timer !== false) {
+//
+//            clearTimeout(timer);
+//
+//          }
+//
+//          timer = setTimeout(() => {
+//
+//            target.html(fbBox);
+//            window.FB.XFBML.parse();
+//            w = DATA.$win.width();
+//
+//          }, 500);
+//
+//        }
+//
+//      });
+//
+//    };
 
 
     //scroll fadein contents
@@ -267,8 +332,8 @@
         fadeInItem.each(function() {
 
           itemTopPosition = $(this).offset().top;
-          scrollHeight = $window.scrollTop();
-          windowHeight = $window.height();
+          scrollHeight = DATA.$win.scrollTop();
+          windowHeight = DATA.$winH;
 
           outDistance = 30;
 
@@ -287,7 +352,7 @@
       };
       viewPosition();
 
-      $window.on('scroll', $.throttle(1000 / 15, function() {
+      DATA.$win.on('scroll', $.throttle(1000 / 15, function() {
 
         viewPosition();
 
@@ -296,25 +361,38 @@
     };
 
 
+    $('.js-fadein').each(function() {
+
+      let $this = $(this),
+          offset = $this.offset().top;
+
+      DATA.$win.on('scroll', function() {
+
+        if ($(this).scrollTop() + DATA.$winH > offset + 200) {
+
+          $this.addClass('is-show');
+
+        }
+
+      });
+
+    });
+
+
     /////////////////////////////////
     //
     // load event
     //
     /////////////////////////////////
-    $window.on('load', () => {
+    DATA.$win.on('load', () => {
 
       actionTab();
-      actionSpHeader($('#js-header-trigger'), $('#js-sp-navi'));
-      dropDownMenu($('.js-sp-btn', '#js-sp-navi'));
-      dropDownMenu($('.js-footer-btn', '#js-footer-navi'));
       scrollBox();
-      fbResize($('#js-foot-sns01'));
-      fbResize($('#js-foot-sns02'));
       scrollFadeIn($('.js-fadein-wrap'));
       //
-      loadWindow();
-      //
       carouselInit();
+      loading();
+      actionSpHeader();
 
     });
 
@@ -324,13 +402,13 @@
 //    let finishResizeEvent = () => {
 //      let timer = false;
 //
-//      $window.resize(function() {
+//      DATA.$win.resize(function() {
 //        if (timer !== false) {
 //          clearTimeout(timer);
 //        }
 //        timer = setTimeout(function() {
-//          windowW = $window.width();
-//          windowH = $window.height();
+//          DATA.$winW = DATA.$win.width();
+//          windowH = DATA.$win.height();
 //          scrollBoxUpdate();
 //        }, 300);
 //      });

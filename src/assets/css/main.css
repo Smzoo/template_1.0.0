@@ -1173,6 +1173,29 @@ select {
   background: #d6101c;
 }
 
+/* This is a compiled file, you should be editing the file in the templates directory */
+.pace {
+  -webkit-pointer-events: none;
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.pace-inactive {
+  display: none;
+}
+
+.pace .pace-progress {
+  background: #000000;
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  right: 100%;
+  width: 100%;
+  height: 2px;
+}
+
 .u-text-left {
   text-align: left !important;
 }
@@ -1475,7 +1498,7 @@ select {
   overflow: hidden;
   text-align: left;
   text-transform: capitalize;
-  background-image: url('../images/?1480492324');
+  background-image: url('../images/?1480525611');
   background-repeat: no-repeat;
   background-position: 50% 50%;
 }

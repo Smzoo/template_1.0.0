@@ -239,6 +239,25 @@
         });
       };
       customNavi();
+
+      var thumbnail = function thumbnail() {
+
+        $('.js-slider-thumb').owlCarousel({
+          animateOut: 'fadeOut',
+          smartSpeed: 600,
+          loop: true,
+          autoplay: true,
+          autoplayTimeout: 1500,
+          autoplayHoverPause: true,
+          items: 1,
+          dots: false,
+          thumbs: true,
+          thumbImage: true,
+          thumbContainerClass: 'owl-thumbs',
+          thumbItemClass: 'owl-thumb-item'
+        });
+      };
+      thumbnail();
     };
 
     var scrollBox = function scrollBox() {

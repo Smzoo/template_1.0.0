@@ -255,16 +255,32 @@ gulp.task('default', ['browser'], () => {
 });
 
 
+let myDate = new Date(),
+    releaseYear = myDate.getFullYear() + '',
+    releaseMonth = myDate.getMonth() + 1,
+    releaseDay = myDate.getDate() + '',
+    releaseWeek = myDate.getDay(),
+    yobiArray = ["日","月","火","水","木","金","土"],
+    releaseYobi = yobiArray[releaseWeek],
+    releaseHour = myDate.getHours() + '',
+    releaseMinute = myDate.getMinutes() + '',
+    releaseSecond = myDate.getSeconds() + '';
+
+if (releaseMonth < 10) { releaseMonth = '0' + releaseMonth };
+if (releaseDay < 10) { releaseDay = '0' + releaseDay };
+
+let releaseDate = releaseYear + releaseMonth + releaseDay;
+
 /**
  * Clean up the file for release
  *
 */
 gulp.task('copy', () => {
   gulp.src(distDir + '/**/*')
-    .pipe(gulp.dest('release/01'));
+    .pipe(gulp.dest('release/' + releaseDate));
 });
 
 gulp.task('delete', () => {
-  gulp.src('release/01')
+  gulp.src('release/')
     del(['release/**/*.LCK', 'release/**/*_notes', 'release/**/Templates/']);
 });

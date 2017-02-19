@@ -13,7 +13,7 @@
     scrollTop: 0,
     scrollLeft: 0,
 
-    init: () => {
+    init: function() {
 
       let self = this;
       self.$win = $(window);
@@ -55,7 +55,8 @@
       });
 
     },
-    transitionEnd: 'oTransitionEnd mozTransitionEnd webkitTransitionEnd transitionend'
+    transitionEnd: 'oTransitionEnd mozTransitionEnd webkitTransitionEnd transitionend',
+    animationEnd: 'webkitAnimationEnd oanimationend msAnimationEnd animationend'
 
   };
   DATA.init();
@@ -102,35 +103,39 @@
     /////////////////////////////
     const actionSpHeader = (target, navi) => {
 
-      const $spGnav = navi,
-            $spGnavBtn = target;
+      if (target.length) {
 
-      let isSpGnavOpen = false;
+        const $spGnav = navi,
+              $spGnavBtn = target;
 
-      $spGnavBtn.on('click', function(e) {
+        let isSpGnavOpen = false;
 
-        e.preventDefault();
+        $spGnavBtn.on('click', function(e) {
 
-        if (!isSpGnavOpen) {
+          e.preventDefault();
 
-          $('body').on('touchmove.noScroll', function(e) {
+          if (!isSpGnavOpen) {
 
-            e.preventDefault();
+            $('body').on('touchmove.noScroll', function(e) {
 
-          });
+              e.preventDefault();
 
-          $spGnav.addClass('is-open');
-          isSpGnavOpen = true;
+            });
 
-        } else {
+            $spGnav.addClass('is-open');
+            isSpGnavOpen = true;
 
-          $('body').off('.noScroll');
-          $spGnav.removeClass('is-open');
-          isSpGnavOpen = false;
+          } else {
 
-        }
+            $('body').off('.noScroll');
+            $spGnav.removeClass('is-open');
+            isSpGnavOpen = false;
 
-      });
+          }
+
+        });
+
+      }
 
     };
 
@@ -415,7 +420,7 @@
       //
       carouselInit();
       loading();
-      actionSpHeader();
+      actionSpHeader($('.js-navi-trigger'), $('.js-navi'));
 
     });
 

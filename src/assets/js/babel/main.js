@@ -1,7 +1,6 @@
 'use strict';
 
 (function ($) {
-  var _this = this;
 
   // common
   ///////////////////
@@ -18,7 +17,7 @@
 
     init: function init() {
 
-      var self = _this;
+      var self = this;
       self.$win = $(window);
       self.$body = $('body');
       self.winW = self.$win.width();
@@ -53,7 +52,8 @@
         scroll();
       });
     },
-    transitionEnd: 'oTransitionEnd mozTransitionEnd webkitTransitionEnd transitionend'
+    transitionEnd: 'oTransitionEnd mozTransitionEnd webkitTransitionEnd transitionend',
+    animationEnd: 'webkitAnimationEnd oanimationend msAnimationEnd animationend'
 
   };
   DATA.init();
@@ -94,31 +94,36 @@
     /////////////////////////////
     var actionSpHeader = function actionSpHeader(target, navi) {
 
-      var $spGnav = navi,
-          $spGnavBtn = target;
+      if (target.length) {
+        (function () {
 
-      var isSpGnavOpen = false;
+          var $spGnav = navi,
+              $spGnavBtn = target;
 
-      $spGnavBtn.on('click', function (e) {
+          var isSpGnavOpen = false;
 
-        e.preventDefault();
-
-        if (!isSpGnavOpen) {
-
-          $('body').on('touchmove.noScroll', function (e) {
+          $spGnavBtn.on('click', function (e) {
 
             e.preventDefault();
+
+            if (!isSpGnavOpen) {
+
+              $('body').on('touchmove.noScroll', function (e) {
+
+                e.preventDefault();
+              });
+
+              $spGnav.addClass('is-open');
+              isSpGnavOpen = true;
+            } else {
+
+              $('body').off('.noScroll');
+              $spGnav.removeClass('is-open');
+              isSpGnavOpen = false;
+            }
           });
-
-          $spGnav.addClass('is-open');
-          isSpGnavOpen = true;
-        } else {
-
-          $('body').off('.noScroll');
-          $spGnav.removeClass('is-open');
-          isSpGnavOpen = false;
-        }
-      });
+        })();
+      }
     };
 
     // home tab
@@ -374,7 +379,7 @@
       //
       carouselInit();
       loading();
-      actionSpHeader();
+      actionSpHeader($('.js-navi-trigger'), $('.js-navi'));
     });
 
     // Process when the window resize is over

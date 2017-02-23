@@ -106,8 +106,9 @@ gulp.task('sass', () => {
   gulp.src(srcPath.sassPath + '/**/*.scss')
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
     .pipe(frontnote({
-      out: srcPath.cssPath,
-      css:  './main.css'
+      out: distPath.cssPath + '/guide/',
+      css:  '../main.css',
+      title: 'Style Guide'
     }))
     .pipe(sass({
       config_file: 'config.rb',

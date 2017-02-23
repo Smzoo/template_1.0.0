@@ -1,44 +1,22 @@
 /*
-#styleguide
-見出しのスタイル＊ タイトルをここに書く。
+#overview
+base
 
-これはサイト全体に適用される見出しのスタイルです＊ コメントをここに書く。
-
-
-
-```
-<h1 class="h1">title01</h1>
-<h2 class="h2">title02</h2>
-<h3 class="h3">title03</h3>
-```
+site common base style.
 
 */
 
 /*
 #styleguide
-古い見出し
+link
 
-これは昔の見出しです。
-
-@todo
-@非推奨
+commom link style.
 
 ```
-<h1>title01</h1>
+<a href="">title01</a>
 ```
-*/
-
-/*
-
-#colors
-
-@primary #33ccaa
-@secondary #aa55cc
-@primary-text #cccccc
-
 
 */
-
 html {
   font-size: $base-fontsize;
 }

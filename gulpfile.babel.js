@@ -60,6 +60,9 @@ const gulp = require('gulp'),
       babel = require('gulp-babel'), // es6
       concat = require('gulp-concat'), // concat ... order.JSON
       eslint = require('gulp-eslint'), // eslint
+      webpackStream = require("webpack-stream"),
+      webpack = require("webpack"),
+      webpackConfig = require("./webpack.config"),
 
       //
       // HTML
@@ -135,47 +138,31 @@ gulp.task('sass', () => {
  *
  *
  * Check the script with ESLint.
- * Compile the ES 2015 notation to ES 5 with babel, save it after renaming.
- * Join scripts in the order specified by JSON and save them.
- * Compress the combined script, output the source map and save.
-* Reload the browser.
+ * webpack.
+ * Reload the browser.
  *
- * ESLintでスクリプトをチェックする。
- * babelでES2015記法をES5にコンパイルしてリネーム後、保存する。
- * JSONで指定した順番にスクリプトを結合して保存する。
- * 結合したスクリプトを圧縮し、ソースマップを出力して保存。
- * ブラウザを再起動する。
+ * main以下のjsファイルをESLintでチェックする。
+ * webpackに処理を渡す。
+ * ブラウザをリロードする。
  *
 */
-let jsJson = JSON.parse(fs.readFileSync(srcPath.jsPath + '/order.json')),
-    jsList = [],
-    cutLength;
-for (let i = 0; i < jsJson.order.length; i++) {
-  jsList[i] = srcPath.jsPath + jsJson.order[i];
-}
 //
-gulp.task('js.babel', () => {
-  return gulp.src(srcPath.jsPath + '/**/*babel.js')
+gulp.task('js.lint', () => {
+  return gulp.src(srcPath.jsPath + '/main/**/*.js')
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
     .pipe(eslint({useEslintrc: true}))
     .pipe(eslint.format())
     .pipe(eslint.failAfterError())
-    .pipe(babel())
-    .pipe(rename(function (Path) {
-       cutLength = Path.basename.length - 6;
-       Path.basename = Path.basename.slice(0, cutLength);
-    }))
-    .pipe(gulp.dest(srcPath.jsPath + '/babel/'))
-});
-gulp.task('js.concat', () => {
-  return gulp.src(jsList.join(',').split(','))
-    .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
-    .pipe(concat('index.js'))
-    .pipe(gulp.dest(distPath.jsPath + '/'))
 });
 
+gulp.task('js.webpack', () => {
+  return plumber({ errorHandler: notify.onError('<%= error.message %>') })
+    .pipe(webpackStream(webpackConfig, webpack))
+    .pipe(gulp.dest(distPath.jsPath + '/'))
+});
+//
 gulp.task('js.uglify', () => {
-  return gulp.src(distPath.jsPath + '/index.js')
+  return gulp.src([distPath.jsPath + '/**/*.js', '!' + distPath.jsPath + '/**/*.min*.js'])
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
     .pipe(sourcemaps.init())
     .pipe(uglify({preserveComments: 'some'}))
@@ -187,7 +174,7 @@ gulp.task('js.uglify', () => {
 });
 //
 gulp.task('js', function(callback) {
-  gulpSequence('js.babel', 'js.concat', 'js.uglify')(callback)
+  gulpSequence('js.lint', 'js.webpack', 'js.uglify')(callback)
 });
 
 
@@ -249,7 +236,7 @@ gulp.task('images', ['images.min', 'images.reload']);
  *
 */
 gulp.task('default', ['browser'], () => {
-  watch([srcPath.jsPath + '/**/*.js', '!' + srcPath.jsPath + '/babel/**/*.js'], () => { gulp.start(['js']) });
+  watch([srcPath.jsPath + '/**/*.{js,vue}', ], () => { gulp.start(['js']) });
   watch([srcPath.sassPath + '/**/*.scss'], () => { gulp.start(['sass']) });
   watch([srcDir + '/**/*.ejs'], () => { gulp.start(['ejs']) });
   watch([srcPath.imgPath + '/**/*.{png,jpg,gif,svg}'], () => { gulp.start(['images']) });

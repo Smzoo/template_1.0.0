@@ -14493,7 +14493,7 @@ css_browser_selector(navigator.userAgent);
 
     spW: 640,
     tabW: 768,
-    breakPointPC: 1024,
+    pcW: 1024,
     scrollTop: 0,
     scrollLeft: 0,
 
@@ -14505,17 +14505,21 @@ css_browser_selector(navigator.userAgent);
       self.winW = self.$win.width();
       self.winH = self.$win.height();
       self.bodyH = self.$body.height();
-      self.isMini = self.$win.width() <= self.spW;
-      self.isTab = self.spW <= self.$win.width() && self.$win.width() <= self.tabW;
-      self.isPC = self.tabW <= self.$win.width() && self.$win.width() <= self.breakPointPC;
+      self.isMini = self.winW <= self.spW;
+      self.isSp = self.winW >= self.spW && self.winW <= self.tabW;
+      self.isTab = self.spW <= self.winW && self.winW <= self.tabW;
+      self.isPC = self.tabW <= self.winW && self.winW <= self.pcW;
+      self.isLarge = self.winW >= self.pcW;
 
       var resize = function resize() {
 
         self.winW = self.$win.width();
         self.winH = self.$win.height();
-        self.isMini = self.$win.width() <= self.spW;
-        self.isTab = self.spW <= self.$win.width() && self.$win.width() <= self.tabW;
-        self.isPC = self.tabW <= self.$win.width() && self.$win.width() <= self.breakPointPC;
+        self.isMini = self.winW <= self.spW;
+        self.isSp = self.winW >= self.spW && self.winW <= self.tabW;
+        self.isTab = self.spW <= self.winW && self.winW <= self.tabW;
+        self.isPC = self.tabW <= self.winW && self.winW <= self.pcW;
+        self.isLarge = self.winW >= self.pcW;
       };
       resize();
       self.$win.on('resize', function () {
@@ -14577,34 +14581,32 @@ css_browser_selector(navigator.userAgent);
     var actionSpHeader = function actionSpHeader(target, navi) {
 
       if (target.length) {
-        (function () {
 
-          var $spGnav = navi,
-              $spGnavBtn = target;
+        var $spGnav = navi,
+            $spGnavBtn = target;
 
-          var isSpGnavOpen = false;
+        var isSpGnavOpen = false;
 
-          $spGnavBtn.on('click', function (e) {
+        $spGnavBtn.on('click', function (e) {
 
-            e.preventDefault();
+          e.preventDefault();
 
-            if (!isSpGnavOpen) {
+          if (!isSpGnavOpen) {
 
-              $('body').on('touchmove.noScroll', function (e) {
+            $('body').on('touchmove.noScroll', function (e) {
 
-                e.preventDefault();
-              });
+              e.preventDefault();
+            });
 
-              $spGnav.addClass('is-open');
-              isSpGnavOpen = true;
-            } else {
+            $spGnav.addClass('is-open');
+            isSpGnavOpen = true;
+          } else {
 
-              $('body').off('.noScroll');
-              $spGnav.removeClass('is-open');
-              isSpGnavOpen = false;
-            }
-          });
-        })();
+            $('body').off('.noScroll');
+            $spGnav.removeClass('is-open');
+            isSpGnavOpen = false;
+          }
+        });
       }
     };
 

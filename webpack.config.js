@@ -15,7 +15,7 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
-          presets: ['es2015']
+          presets: ['es2015', 'es2017'],
         }
       },
       {
@@ -27,6 +27,13 @@ module.exports = {
             scss: 'vue-style-loader!css-loader!sass-loader?includePaths[]=./src/sass/'
           }
         }
+      },
+      {
+        test: /\.css$/,
+        exclude: /node_modules/,
+        loaders: [
+          'css-loader',
+        ]
       },
     ],
   },
@@ -42,7 +49,8 @@ module.exports = {
       // /なしだと/node_modules/階層へ
       'Vue$': 'vue/dist/vue.common.js',
       // /ありだとrootからのパスに
-      'Component': path.resolve(__dirname, 'src/assets/js/component/')
+      'Component': path.resolve(__dirname, 'src/assets/js/component/'),
+      'TweenMax': 'gsap/TweenMax.js'
     },
   },
   plugins: [
@@ -51,6 +59,7 @@ module.exports = {
     new webpack.ProvidePlugin({
       jQuery: 'jquery',
       $: 'jquery',
+      'window.jQuery': 'jquery'
     })
   ],
 }

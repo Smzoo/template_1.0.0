@@ -1,134 +1,119 @@
-// =========================================================
-//
-// display set
-//
-// =========================================================
-//
-.u-inline-block {
-  display: inline-block !important;
+// Display
+
+$displays: "block" "flex" "inline" "inline-block" "inline-flex";
+
+@each $display in $displays {
+  .is-#{$display} {
+    display: #{$display};
+  }
+
+  .is-#{$display}-mobile {
+    @include mobile {
+      display: #{$display} !important;
+    }
+  }
+
+  .is-#{$display}-tablet {
+    @include tablet {
+      display: #{$display} !important;
+    }
+  }
+
+  .is-#{$display}-tablet-only {
+    @include tablet-only {
+      display: #{$display} !important;
+    }
+  }
+
+  .is-#{$display}-touch {
+    @include touch {
+      display: #{$display} !important;
+    }
+  }
+
+  .is-#{$display}-desktop {
+    @include desktop {
+      display: #{$display} !important;
+    }
+  }
+
+  .is-#{$display}-desktop-only {
+    @include desktop-only {
+      display: #{$display} !important;
+    }
+  }
+
+  .is-#{$display}-widescreen {
+    @include widescreen {
+      display: #{$display} !important;
+    }
+  }
 }
 
-.u-block {
-  display: block !important;
+// Overflow
+
+.is-clipped {
+  overflow: hidden !important;
 }
 
-.u-hidden {
+// Visibility
+
+.is-hidden {
   display: none !important;
 }
 
-.u-invisible {
-  visibility: hidden !important;
-}
-
-.u-sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
-}
-
-// ---------------------------------------------------------
-// responsive (mobile first)
-// ---------------------------------------------------------
-//
-// ----- visible ----- //
-.u-sp-visible {
-  display: block;
-  //
-  @media (min-width: $pad-size) {
-    display: none;
-  }
-}
-
-.u-pad-visible {
-  display: none;
-  //
-  @media (min-width: $pad-size) {
-    display: block;
-  }
-}
-
-.u-pc-visible {
-  display: none;
-  //
-  @media (min-width: $pc-size) {
-    display: block;
-  }
-}
-
-.u-large-visible {
-  display: none;
-  //
-  @media (min-width: $large-size) {
-    display: block;
-  }
-}
-
-// ----- hidden ----- //
-.u-sp-hidden {
-  display: none;
-  //
-  @media (min-width: $pad-size) {
-    display: block;
-  }
-}
-
-.u-pad-hidden {
-  display: block;
-  //
-  @media (min-width: $pad-size) {
-    display: none;
-  }
-}
-
-.u-pc-hidden {
-  display: block;
-  //
-  @media (min-width: $pc-size) {
-    display: none;
-  }
-}
-
-.u-large-hidden {
-  display: block;
-  //
-  @media (min-width: $large-size) {
-    display: none;
-  }
-}
-
-
-// ---------------------------------------------------------
-// print
-// ---------------------------------------------------------
-//
-.visible-print-block {
-  display: none !important;
-  @media print {
-    display: block !important;
-  }
-}
-
-.visible-print-inline {
-  display: none !important;
-  @media print {
-    display: inline !important;
-  }
-}
-
-.visible-print-inline-block {
-  display: none !important;
-  @media print {
-    display: inline-block !important;
-  }
-}
-
-.hidden-print {
-  @media print {
+.is-hidden-mobile {
+  @include mobile {
     display: none !important;
   }
+}
+
+.is-hidden-tablet {
+  @include tablet {
+    display: none !important;
+  }
+}
+
+.is-hidden-tablet-only {
+  @include tablet-only {
+    display: none !important;
+  }
+}
+
+.is-hidden-touch {
+  @include touch {
+    display: none !important;
+  }
+}
+
+.is-hidden-desktop {
+  @include desktop {
+    display: none !important;
+  }
+}
+
+.is-hidden-desktop-only {
+  @include desktop-only {
+    display: none !important;
+  }
+}
+
+.is-hidden-widescreen {
+  @include widescreen {
+    display: none !important;
+  }
+}
+
+// Other
+
+.is-marginless {
+  margin: 0 !important;
+}
+
+.is-paddingless {
+  padding: 0 !important;
+}
+
+.is-unselectable {
+  @include unselectable;
 }

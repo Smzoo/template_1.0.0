@@ -138,7 +138,7 @@ $fg-class-row: 'f-container' !default;
 $fg-class-col: 'f-item' !default;
 $fg-class-off: 'f-off' !default;
 //
-$fg-breakpoints: ( (xs), (sm, $pad-size), (md, $pc-size), (lg, $large-size)) !default;
+$fg-breakpoints: ( (xs), (sm, $tablet), (md, $desktop), (lg, $widescreen)) !default;
 //
 @function get-col-percent($column-num) {
   @return $column-num / $flex-grid-columns * 100%;
@@ -204,7 +204,7 @@ $fg-breakpoints: ( (xs), (sm, $pad-size), (md, $pc-size), (lg, $large-size)) !de
   // Run the loop for as many columns as speficied
   //////////////////////
   @for $i from 1 through $flex-grid-columns {
-    .#{ $fg-class-col }-#{$namespace}--#{$i} {
+    .#{ $fg-class-col }-#{$namespace}-#{$i} {
       flex-basis: get-col-percent($i);
       max-width: get-col-percent($i);
     }
@@ -213,7 +213,7 @@ $fg-breakpoints: ( (xs), (sm, $pad-size), (md, $pc-size), (lg, $large-size)) !de
   //////////////////////
   @for $i from 1 through $flex-grid-columns {
     @if ( $i !=$flex-grid-columns) {
-      .#{ $fg-class-off }-#{$namespace}--#{$i} {
+      .#{ $fg-class-off }-#{$namespace}-#{$i} {
         margin-left: get-col-percent($i);
       }
     }

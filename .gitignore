@@ -43,3 +43,5 @@ dw_php_codehinting.config
 
 # node
 node_modules
+
+.idea

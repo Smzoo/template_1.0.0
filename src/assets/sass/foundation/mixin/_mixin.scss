@@ -34,6 +34,123 @@
   @include fontSmooth();
 }
 
+@mixin overflow-touch {
+  -webkit-overflow-scrolling: touch;
+}
+
+@mixin overlay($offset: 0) {
+  bottom: $offset;
+  left: $offset;
+  position: absolute;
+  right: $offset;
+  top: $offset;
+}
+
+@mixin bg-cover {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+@function setLongShadow($color, $length) {
+  $value: 0 0 $color;
+  @for $i from 1 through $length {
+    $value_i:  $i + 'px' + ' ' +  $i + 'px' + ' ' + $color;
+    $value: #{$value}, #{$value_i};
+  }
+  @return $value;
+}
+
+@mixin longShadow($color, $length) {
+  text-shadow: setLongShadow($color, $length);
+}
+
+@mixin placeholder {
+  $placeholders: ":-moz" ":-webkit-input" "-moz" "-ms-input";
+
+  @each $placeholder in $placeholders {
+    &:#{$placeholder}-placeholder {
+      @content;
+    }
+  }
+}
+
+@mixin unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+// Responsiveness
+
+@mixin from($device) {
+  @media screen and (min-width: $device) {
+    @content;
+  }
+}
+
+@mixin until($device) {
+  @media screen and (max-width: $device - 1px) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media screen and (max-width: $tablet - 1px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media screen and (min-width: $tablet), print {
+    @content;
+  }
+}
+
+@mixin tablet-only {
+  @media screen and (min-width: $tablet) and (max-width: $desktop - 1px) {
+    @content;
+  }
+}
+
+@mixin touch {
+  @media screen and (max-width: $desktop - 1px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media screen and (min-width: $desktop) {
+    @content;
+  }
+}
+
+@mixin desktop-only {
+  @media screen and (min-width: $desktop) and (max-width: $widescreen - 1px) {
+    @content;
+  }
+}
+
+@mixin widescreen {
+  @media screen and (min-width: $widescreen) {
+    @content;
+  }
+}
+
+@mixin widescreen-only {
+  @media screen and (min-width: $widescreen) and (max-width: $fullhd - 1px) {
+    @content;
+  }
+}
+
+@mixin fullhd {
+  @media screen and (min-width: $fullhd) {
+    @content;
+  }
+}
+
 //
 // family scss
 // (http://lukyvj.github.io/family.scss/)
@@ -291,7 +408,7 @@
 /// @group no-arguments
 /// @content [Write the style you want to apply to the children, and it will be added within the @content directive]
 @mixin not-unique() {
-  &:not(: only-child) {
+  &:not(:only-child) {
     @content;
   }
 }
@@ -364,3 +481,4 @@
     animation: #{$name} #{$duration}s #{$timingFunction} #{$iterationCount};
   }
 }
+

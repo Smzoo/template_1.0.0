@@ -195,7 +195,7 @@ gulp.task('ejs.init', () => {
   return gulp.src([srcDir + '/**/*.ejs','!' + srcDir + '/**/*_*.ejs'])
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
     .pipe(ejs({data: JSON.parse(fs.readFileSync(srcDir + '/common/' + 'data.json'))}))
-    //.pipe(minifyHtml())
+    .pipe(minifyHtml())
     .pipe(rename({extname: '.html'}))
     .pipe(gulp.dest(distDir + '/'))
     .pipe(notify('html task finished'));

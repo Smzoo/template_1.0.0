@@ -7,81 +7,82 @@
  */
 const gulp = require('gulp'),
 
-      //
-      // path
-      // - - - - - - - - - -
-      docs = '.',
-      //
-      distDir =  docs + '/dist',
-      srcDir =  docs + '/src',
-      //
-      srcAssetsDir = srcDir + '/assets',
-      distAssetsDir = distDir + '/assets',
-      //
-      srcPath = {
-        'imgPath': srcAssetsDir + '/images',
-        'sassPath': srcAssetsDir + '/sass',
-        'cssPath': srcAssetsDir + '/css',
-        'jsPath': srcAssetsDir + '/js'
-      },
-      distPath = {
-        'imgPath': distAssetsDir + '/images',
-        'sassPath': distAssetsDir + '/sass',
-        'cssPath': distAssetsDir + '/css',
-        'jsPath': distAssetsDir + '/js'
-      },
+  //
+  // path
+  // - - - - - - - - - -
+  docs = '.',
+  //
+  distDir =  docs + '/dist',
+  srcDir =  docs + '/src',
+  //
+  srcAssetsDir = srcDir + '/assets',
+  distAssetsDir = distDir + '/assets',
+  //
+  srcPath = {
+    'imgPath': srcAssetsDir + '/images',
+    'sassPath': srcAssetsDir + '/sass',
+    'cssPath': srcAssetsDir + '/css',
+    'jsPath': srcAssetsDir + '/js'
+  },
+  distPath = {
+    'imgPath': distAssetsDir + '/images',
+    'sassPath': distAssetsDir + '/sass',
+    'cssPath': distAssetsDir + '/css',
+    'jsPath': distAssetsDir + '/js'
+  },
 
-      //
-      // common
-      // - - - - - - - - -
-      plumber = require('gulp-plumber'), // error escape
-      rename = require('gulp-rename'), // rename
-      sourcemaps = require('gulp-sourcemaps'), // sourcemap
-      gulpSequence = require('gulp-sequence'), // sequence
-      notify = require('gulp-notify'), // alert
-      watch = require("gulp-watch"),  // watch
-      del = require('del'), // delete
-      fs = require('graceful-fs'), // JSON load
-      cache = require('gulp-cached'), // cache
+  //
+  // common
+  // - - - - - - - - -
+  plumber = require('gulp-plumber'), // error escape
+  rename = require('gulp-rename'), // rename
+  sourcemaps = require('gulp-sourcemaps'), // sourcemap
+  gulpSequence = require('gulp-sequence'), // sequence
+  notify = require('gulp-notify'), // alert
+  watch = require("gulp-watch"),  // watch
+  del = require('del'), // delete
+  fs = require('graceful-fs'), // JSON load
+  cache = require('gulp-cached'), // cache
 
-      //
-      // CSS
-      // - - - - - - - - -
-      autoprefixer = require('gulp-autoprefixer'), // prefix
-      sass = require('gulp-compass'), // Sass compass
-      csscomb = require('gulp-csscomb'), // css
-      cssmin = require('gulp-cssmin'), // css min
-      frontnote = require('gulp-frontnote'), // style guide
+  //
+  // CSS
+  // - - - - - - - - -
+  autoprefixer = require('gulp-autoprefixer'), // prefix
+  sass = require('gulp-sass'), // Sass compass
+  csscomb = require('gulp-csscomb'), // css
+  cssmin = require('gulp-cssmin'), // css min
+  frontnote = require('gulp-frontnote'), // style guide
 
-      //
-      // JavaScript
-      // - - - - - - - - -
-      uglify = require('gulp-uglify'), // js min
-      babel = require('gulp-babel'), // es6
-      concat = require('gulp-concat'), // concat ... order.JSON
-      eslint = require('gulp-eslint'), // eslint
-      webpackStream = require("webpack-stream"),
-      webpack = require("webpack"),
-      webpackConfig = require("./webpack.config"),
+  //
+  // JavaScript
+  // - - - - - - - - -
+  uglify = require('gulp-uglify'), // js min
+  babel = require('gulp-babel'), // es6
+  concat = require('gulp-concat'), // concat ... order.JSON
+  eslint = require('gulp-eslint'), // eslint
+  webpackStream = require("webpack-stream"),
+  webpack = require("webpack"),
+  webpackConfig = require("./webpack.config"),
 
-      //
-      // HTML
-      // - - - - - - - - -
-      ejs = require('gulp-ejs'), // ejs template
-      minifyHtml = require('gulp-minify-html'), // html min
-      browser = require('browser-sync'), // browser start
+  //
+  // HTML
+  // - - - - - - - - -
+  ejs = require('gulp-ejs'), // ejs template
+  minifyHtml = require('gulp-minify-html'), // html min
+  browser = require('browser-sync'), // browser start
 
-      //
-      // image
-      // - - - - - - - - -
-      imagemin = require('gulp-imagemin'), // image min
-      pngquant = require('imagemin-pngquant');
+  //
+  // image
+  // - - - - - - - - -
+  imagemin = require('gulp-imagemin'), // image min
+  mozjpeg = require('imagemin-mozjpeg'),
+  pngquant = require('imagemin-pngquant');
 
 
 /**
  * Start the server
  *
-*/
+ */
 gulp.task('browser', () => {
   browser({ server: { baseDir: distDir + '/' } });
 });
@@ -104,7 +105,7 @@ gulp.task('browser', () => {
  * 一時保存して、圧縮して名前を変更して、再保存。
  * ブラウザを再起動する。
  *
-*/
+ */
 gulp.task('sass', () => {
   gulp.src(srcPath.sassPath + '/**/*.scss')
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
@@ -113,12 +114,7 @@ gulp.task('sass', () => {
       css:  '../main.css',
       title: 'Style Guide'
     }))
-    .pipe(sass({
-      config_file: 'config.rb',
-      sass: srcPath.sassPath,
-      css: srcPath.cssPath,
-      image: srcPath.imgPath
-    }))
+    .pipe(sass())
     .pipe(autoprefixer({
       browsers: ['last 2 version', 'iOS >= 8.1', 'Android >= 4.4.4'],
       cascade: false
@@ -145,7 +141,7 @@ gulp.task('sass', () => {
  * webpackに処理を渡す。
  * ブラウザをリロードする。
  *
-*/
+ */
 //
 gulp.task('js.lint', () => {
   return gulp.src(srcPath.jsPath + '/main/**/*.js')
@@ -190,12 +186,12 @@ gulp.task('js', function(callback) {
  * htmlを圧縮して保存。
  * ブラウザを再起動する。
  *
-*/
+ */
 gulp.task('ejs.init', () => {
   return gulp.src([srcDir + '/**/*.ejs','!' + srcDir + '/**/*_*.ejs'])
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
     .pipe(ejs({data: JSON.parse(fs.readFileSync(srcDir + '/common/' + 'data.json'))}))
-    .pipe(minifyHtml())
+    //.pipe(minifyHtml())
     .pipe(rename({extname: '.html'}))
     .pipe(gulp.dest(distDir + '/'))
     .pipe(notify('html task finished'));
@@ -216,11 +212,24 @@ gulp.task('ejs', ['ejs.init', 'ejs.reload']);
  * 画像を圧縮して保存。
  * ブラウザを再起動する。
  *
-*/
+ */
 gulp.task('images.min', () => {
   return gulp.src(srcPath.imgPath + '/**/*.{png,jpg,gif,svg}')
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>')}))
-    //.pipe(cache( imagemin( [pngquant({quality: '60-80', speed: 1})] )))
+    .pipe(imagemin([
+      pngquant({
+        quality: '65-80',
+        speed: 1,
+        floyd: 0,
+      }),
+      mozjpeg({
+        quality: 85,
+        progressive: true
+      }),
+      imagemin.svgo(),
+      imagemin.optipng(),
+      imagemin.gifsicle()
+    ]))
     .pipe(gulp.dest(distPath.imgPath + '/'))
 });
 //
@@ -234,7 +243,7 @@ gulp.task('images', ['images.min', 'images.reload']);
 /**
  * dafault task
  *
-*/
+ */
 gulp.task('default', ['browser'], () => {
   watch([srcPath.jsPath + '/**/*.{js,vue}', ], () => { gulp.start(['js']) });
   watch([srcPath.sassPath + '/**/*.scss'], () => { gulp.start(['sass']) });
@@ -244,15 +253,15 @@ gulp.task('default', ['browser'], () => {
 
 
 let myDate = new Date(),
-    releaseYear = myDate.getFullYear() + '',
-    releaseMonth = myDate.getMonth() + 1,
-    releaseDay = myDate.getDate() + '',
-    releaseWeek = myDate.getDay(),
-    yobiArray = ["日","月","火","水","木","金","土"],
-    releaseYobi = yobiArray[releaseWeek],
-    releaseHour = myDate.getHours() + '',
-    releaseMinute = myDate.getMinutes() + '',
-    releaseSecond = myDate.getSeconds() + '';
+  releaseYear = myDate.getFullYear() + '',
+  releaseMonth = myDate.getMonth() + 1,
+  releaseDay = myDate.getDate() + '',
+  releaseWeek = myDate.getDay(),
+  yobiArray = ["日","月","火","水","木","金","土"],
+  releaseYobi = yobiArray[releaseWeek],
+  releaseHour = myDate.getHours() + '',
+  releaseMinute = myDate.getMinutes() + '',
+  releaseSecond = myDate.getSeconds() + '';
 
 if (releaseMonth < 10) { releaseMonth = '0' + releaseMonth };
 if (releaseDay < 10) { releaseDay = '0' + releaseDay };
@@ -262,7 +271,7 @@ let releaseDate = releaseYear + releaseMonth + releaseDay;
 /**
  * Clean up the file for release
  *
-*/
+ */
 gulp.task('copy', () => {
   gulp.src(distDir + '/**/*')
     .pipe(gulp.dest('release/' + releaseDate));
@@ -270,5 +279,5 @@ gulp.task('copy', () => {
 
 gulp.task('delete', () => {
   gulp.src('release/')
-    del(['release/**/*.LCK', 'release/**/*_notes', 'release/**/Templates/']);
+  del(['release/**/*.LCK', 'release/**/*_notes', 'release/**/Templates/']);
 });

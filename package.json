@@ -37,6 +37,7 @@
     "gulp-sourcemaps": "^2.2.0",
     "gulp-uglify": "^1.5.3",
     "gulp-watch": "^4.3.11",
+    "imagemin-mozjpeg": "^6.0.0",
     "imagemin-pngquant": "^5.0.0",
     "jquery": "^3.2.1",
     "jquery.easing": "^1.4.1",
